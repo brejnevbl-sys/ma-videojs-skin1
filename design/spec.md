@@ -1,18 +1,59 @@
 # MA — The Art of Interval (間)
 
-Milestone 1 follows the direction in AGENTS.md: a functional cinematic video skin,
-with generous negative space and restrained editorial typography. Final motion is deferred.
+## Milestone 2: Visual Identity & Interaction Polish
 
-- Foundation: official Video.js 10 CLI, React, plain CSS, Scaffold, video preset.
-- Keep the Scaffold controls, error dialog, hotkeys, gestures and status announcer.
-- Required controls: play/pause, seek rail, current/duration time, mute/volume and fullscreen.
-- Surfaces: charcoal #131313; text: warm ivory #F2E8D2; accent: muted vermilion #C06855.
-- Derived typography: system serif for the MA editorial heading, system sans-serif for
-  controls, tabular time digits. No externally downloaded fonts.
-- Derived surfaces: dark scrims keep controls readable over bright and dark frames;
-  popups use opaque charcoal. Focus uses a clearly visible ivory outline.
-- Derived seek rail: tapered ends and vermilion fill, with a generous interaction area.
-- Use container queries for narrow players and preserve source/focus order.
-- Retain built-in menu dismissal, accessible labels and keyboard operation.
-- Respect reduced motion and forced colors. Preserve public accent and radius properties.
-- Keep portable skin code in src/; use the generated workbench for validation.
+Source of direction: AGENTS.md and [Issue #2](https://github.com/brejnevbl-sys/ma-videojs-skin1/issues/2).
+MA expresses deliberate space, rather than Japanese ornament. The identity must survive
+when the skin is removed from its demonstration page.
+
+### Composition and typography (derived execution)
+
+- Quiet MA wordmark inside the player, with a short separating rule and the brand's subtitle.
+- Editorial system serif for the wordmark/headings; system sans-serif for controls;
+  monospaced, tabular time digits. Japanese system Mincho fallbacks for 間. No font downloads.
+- Charcoal #131313, ivory #F2E8D2, muted vermilion #C06855. Dark control surfaces
+  remain legible over bright/dark pictures. Use accent sparingly for the timeline and active detail.
+- Top: brand/title at start, device/fullscreen controls at end. Center: an open-ring play
+  control with quiet skip controls. Bottom: calligraphic seek rail, then play, volume,
+  current/duration time, captions/settings. Source order is visual/tab order.
+- The showcase stays at /ma.html; the technical workbench remains at /.
+
+### Signature timeline (derived execution)
+
+Keep the actual Video.js TimeSlider, chapter geometry, buffer, fill, thumb, preview and
+keyboard semantics. A hand-drawn vector silhouette shapes the complete track, including
+its buffer and progress planes; its uneven pressure and tapered ends suggest a single
+brush gesture. The interactive root is 48px high, independent of the 12px visual stroke.
+A slim ivory seal indicates the exact position. Focus adds a strong outline; dragging
+retains precise position, with no interpolation of progress. RTL preserves Video.js
+geometry without transforming the progress planes. Forced colors restores a solid rail.
+
+### Controls and states (derived execution)
+
+- Keep the official Scaffold icon family consistently; original treatment comes from
+  spacing, shape, open-ring framing and responsive layout, without changing intuitive labels.
+- Buttons: 44px minimum; immediate press feedback, restrained hover on fine pointers.
+- Paused: central play appears in an open ring; playing: it fades out to clear the image,
+  unless it holds keyboard focus. Bottom play/pause always follows confirmed Video.js state.
+- Controls: reveal 120ms, hide 220ms with a 6px movement, driven by Video.js data-visible.
+  Focus overrides hiding immediately. Touch always keeps a small bottom control dock available.
+- Loading: existing BufferingIndicator with a bespoke open ring; no invented playback state.
+- Settings, volume and tooltips: charcoal paper surfaces, ivory borders, consistent offsets,
+  44px menu items, visible selection and a short 140ms entrance from the trigger.
+- Error: existing modal semantics, localised title/description/close, editorial typography
+  and an accent rule; keep focus containment and Escape dismissal.
+- Reduced motion disables all transitions and rotation, preserving a static loading symbol.
+- Forced colors/high contrast remove translucent styling and maintain borders and focus.
+
+### Responsive rules and validation
+
+Use player container queries rather than viewport sizing. At 240/320/390px, keep both
+times, play, mute/volume, settings, seek and fullscreen available. Remove central controls
+when they would overlap; compress decorative branding before controls. Keep 44px targets
+and avoid synthetic touch hit-area overlap. No new runtime dependencies.
+
+Run npm ci, typecheck, build and all Playwright tests against production output. Add
+regressions for the brush's hit area and precise pointer seek, keyboard/tab order, touch
+discovery, idle/focus revival, forced colors, reduced motion, buffering and popup bounds.
+Capture desktop, phone, 240px, paused/playing, settings, focus, loading, errors and
+bright/dark frames. Record emulation separately from physical-device testing.

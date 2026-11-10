@@ -1,0 +1,4 @@
+<!-- Original MA brush silhouette. Visual only; TimeSlider provides all interaction. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 24" preserveAspectRatio="none">
+  <path fill="black" d="M0 15 14 11 41 10 76 7 124 6 168 7 217 4 262 5 318 3 373 5 427 2 482 4 539 5 596 4 652 7 709 6 769 9 822 8 873 11 921 12 967 15 1000 16 978 18 944 17 902 20 853 19 801 22 748 20 692 22 637 20 581 22 523 19 465 21 409 18 349 20 290 17 232 19 177 16 121 18 77 15 39 17 15 15Z"/>
+</svg>
