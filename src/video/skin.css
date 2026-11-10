@@ -1561,8 +1561,8 @@
     }
 
     .video-controls-center-play {
-      width: calc(var(--media-spacing) * 14.5) !important;
-      height: calc(var(--media-spacing) * 14.5) !important;
+      width: var(--ma-center-size, calc(var(--media-spacing) * 14.5)) !important;
+      height: var(--ma-center-size, calc(var(--media-spacing) * 14.5)) !important;
     }
 
     .video-controls-center-play-icon {
@@ -1771,7 +1771,7 @@
 
   @scope (.media-skin[data-theme="scaffold"][data-preset="video"]) {
     .media-tooltip-screen-popup {
-      --media-tooltip-side-offset: calc(var(--media-spacing) * 3) !important;
+      --media-tooltip-side-offset: var(--ma-tooltip-offset, calc(var(--media-spacing) * 3)) !important;
     }
   }
 

@@ -31,6 +31,10 @@ export function VideoControlsContent({
         seekForward={seekForward}
         top={
           <>
+            <div className="ma-player-brand" aria-hidden="true">
+              <span className="ma-player-wordmark">MA<span lang="ja">間</span></span>
+              <span className="ma-player-tagline">The art of interval</span>
+            </div>
             <Title />
             <ScreenControls />
           </>

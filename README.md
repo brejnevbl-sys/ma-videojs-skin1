@@ -1,7 +1,8 @@
 # MA — The Art of Interval (間)
 
 A working Video.js **10.3.0** skin built with React, TypeScript and plain CSS.
-Milestone 1 establishes real playback and accessible controls before final animation work.
+Milestone 2 adds MA’s signature brush timeline, editorial identity and interaction polish
+while preserving the verified playback and accessibility foundation.
 
 ## Develop
 
@@ -50,7 +51,8 @@ This is Chromium validation, not a claim of full assistive-technology or Safari/
 - `tests/` — Playwright functional and axe accessibility checks.
 - `.agents/skills/` — official Video.js skills installed for Codex, with `skills-lock.json`.
 - [Design direction](design/spec.md), [workbench instructions](docs/WORKBENCH.md),
-  [implementation and validation notes](docs/MILESTONE-1.md).
+  [Milestone 1 notes](docs/MILESTONE-1.md), [Milestone 2 report and visuals](docs/MILESTONE-2.md),
+  [Contra design description](design/contra-concept.md).
 
 ## Official scaffold provenance
 
@@ -79,6 +81,6 @@ npx skills add https://github.com/videojs/skills --agent codex --yes
 
 ## Scope
 
-This branch is a development foundation. No public site has been deployed and no contest
-submission or Mux bonus is claimed. The generated hosting configuration is retained for a
+The owner has confirmed the Milestone 1 Vercel demo. This branch contains Milestone 2
+for review; it has not been deployed or merged, and no contest submission or Mux bonus is claimed. The generated hosting configuration is retained for a
 later deployment; publishing the workbench requires a separate explicit request.

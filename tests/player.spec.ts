@@ -40,6 +40,8 @@ test('mute, volume, fullscreen and scoped keyboard shortcuts', async ({ page }) 
   await expect.poll(() => video.evaluate(v => v.muted)).toBe(true);
   await page.getByRole('button', { name: 'Unmute', exact: true }).click();
   await expect.poll(() => video.evaluate(v => v.muted)).toBe(false);
+  // Leave and re-enter so this verifies a real hover after clicking the same trigger.
+  await page.mouse.move(1, 1);
   await page.getByRole('button', { name: 'Mute', exact: true }).hover();
   const volume = page.getByRole('slider', { name: /volume/i });
   await expect(volume).toBeVisible();
