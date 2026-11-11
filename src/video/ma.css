@@ -155,6 +155,9 @@
   }
   .media-menu-popup, .media-volume-popover-popup { --media-popover-side-offset: 8px; --media-popup-side-offset: var(--media-popover-side-offset); }
   .media-menu-popup { max-height: min(var(--media-menu-available-height, 320px), 320px); border-block-start: 2px solid var(--media-accent); }
+  /* Short players retain a visible way back while the rate list scrolls. */
+  .media-menu-content { overscroll-behavior: contain; scrollbar-width: auto; scroll-padding-block: 52px 8px; }
+  .media-menu-content[data-submenu] > .media-menu-back-item { position: sticky; top: 0; z-index: 1; box-shadow: 0 1px 0 var(--ma-border); }
   .media-menu-item, .media-menu-radio-item, .media-menu-back-item { min-height: 44px; border-radius: 2px; font-size: 13px; }
   .media-menu-radio-item[aria-checked="true"] { background: var(--media-button-highlight); }
   .media-menu-hint { opacity: .85; font-variant-numeric: tabular-nums; }

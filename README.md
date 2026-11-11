@@ -1,8 +1,8 @@
 # MA — The Art of Interval (間)
 
 A working Video.js **10.3.0** skin built with React, TypeScript and plain CSS.
-Milestone 2 adds MA’s signature brush timeline, editorial identity and interaction polish
-while preserving the verified playback and accessibility foundation.
+Milestone 3 makes MA the landing page, retains the full workbench at /workbench/,
+and prepares a shared media configuration for the owner’s upcoming film.
 
 ## Develop
 
@@ -13,13 +13,18 @@ npm ci
 npm run dev
 ```
 
-- `/ma.html` — MA's editorial demonstration page.
-- `/` — official generated workbench (sizes, aspect ratios, languages and playback options).
+- `/` — MA's editorial demonstration page.
+- `/ma.html` — preserved alias of the same MA page.
+- `/workbench/` — official workbench (sizes, aspect ratios, languages and playback options).
 - `/preview.html#width=240&ratio=16:9` — isolated narrow player.
 
 The player uses a bundled CC0 flower video from MDN, including an audio track.
 No API keys, account, external media request or network service is needed for playback.
 See [media attribution](apps/preview/public/media/ATTRIBUTION.md).
+
+The current sample is unchanged. See [replacing the film](docs/MEDIA.md) for the
+shared video/poster/credits configuration. Code is licensed under [Apache 2.0](LICENSE);
+third-party and media notices are retained in [NOTICE](NOTICE).
 
 ## Validate
 
@@ -79,8 +84,10 @@ project-local skills installer was used instead:
 npx skills add https://github.com/videojs/skills --agent codex --yes
 ```
 
+See [Milestone 3 report](docs/MILESTONE-3.md) for routing and mobile menu QA.
+
 ## Scope
 
-The owner has confirmed the Milestone 1 Vercel demo. This branch contains Milestone 2
+The owner has confirmed the Milestone 1 Vercel demo. This branch contains Milestone 3
 for review; it has not been deployed or merged, and no contest submission or Mux bonus is claimed. The generated hosting configuration is retained for a
 later deployment; publishing the workbench requires a separate explicit request.
