@@ -1,5 +1,9 @@
+import { mockPexelsMedia } from './pexels-fixture';
 import { expect, test, type Page } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+
+test.beforeEach(async ({ page }) => { await mockPexelsMedia(page); });
+
 
 async function open(page: Page, path = '/preview.html#width=960&loop=1') {
   await page.goto(path);
@@ -89,6 +93,7 @@ for (const width of [240, 390]) {
 test('touch dock stays discoverable when idle, including emulated phone fullscreen', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   const page = await context.newPage();
+  await mockPexelsMedia(page);
   await open(page, 'http://127.0.0.1:4173/preview.html#width=390&loop=1');
   await page.getByRole('button', { name: 'Play', exact: true }).last().tap();
   await page.locator('.media-skin').tap({ position: { x: 180, y: 80 } });

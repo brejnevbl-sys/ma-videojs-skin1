@@ -1,5 +1,9 @@
+import { mockPexelsMedia } from './pexels-fixture';
 import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+
+test.beforeEach(async ({ page }) => { await mockPexelsMedia(page); });
+
 
 for (const url of ['/', '/ma.html']) {
   test(`MA landing and real media at ${url}`, async ({ page }) => {
@@ -13,13 +17,13 @@ for (const url of ['/', '/ma.html']) {
     await expect.poll(() => page.locator('video').evaluate(v => v.currentTime)).toBeGreaterThan(.1);
     await page.getByRole('button', { name: 'Pause', exact: true }).last().click();
     const film = await page.locator('video').evaluate(v => v.currentSrc);
-    expect(film).toBe('http://127.0.0.1:4173/media/flower.mp4');
+    expect(film).toBe('http://127.0.0.1:4173/media/pexels/rainy-day.mp4');
     const response = await page.request.get('/media/flower.mp4', { headers: { Range: 'bytes=0-99' } });
     expect(response.status()).toBe(206);
     expect(response.headers()['content-type']).toContain('video/mp4');
     expect((await response.body()).length).toBe(100);
-    await expect(page.locator('.media-poster-image')).toHaveAttribute('src', '/media/flower-poster.jpg');
-    const credit = await page.getByRole('link', { name: 'Film: MDN · CC0' }).first().getAttribute('href');
+    await expect(page.locator('.media-poster-image')).toHaveAttribute('src', '/media/pexels/rainy-day.jpg');
+    const credit = await page.getByRole('link', { name: 'Roberto Lee Cortes · Pexels' }).first().getAttribute('href');
     expect((await page.request.get(credit!)).ok()).toBe(true);
     expect((await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze()).violations).toEqual([]);
     await page.getByRole('link', { name: 'Skin workbench' }).click();
@@ -58,6 +62,7 @@ for (const width of [240, 320, 390]) {
   test(`all rates reachable by keyboard and touch scrolling at ${width}px`, async ({ browser }) => {
     const context = await browser.newContext({ viewport: { width: 430, height: 850 }, hasTouch: true });
     const page = await context.newPage();
+  await mockPexelsMedia(page);
     await page.goto(`http://127.0.0.1:4173/preview.html#width=${width}`);
     await expect.poll(() => page.locator('video').evaluate(v => v.readyState)).toBeGreaterThanOrEqual(2);
     const settings = page.getByRole('button', { name: 'Settings', exact: true });

@@ -55,3 +55,16 @@ footer { padding-block: 24px; border-top: 1px solid var(--ma-page-rule); display
 .about-skin h2 { grid-row: span 2; font: 400 24px Georgia, serif; margin: 0; }
 .about-skin p { margin: 0; max-width: 620px; font-size: 12px; line-height: 1.8; color: #c2b9a8; }
 @media (max-width: 760px) { .about-skin { grid-template-columns: 1fr; gap: 16px; margin-top: 32px; } }
+
+.film-selector { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding: 0; margin: 0 0 28px; border: 0; }
+.film-selector legend { font-size: 11px; letter-spacing: .12em; margin-bottom: 12px; }
+.film-selector label { position: relative; display: flex; align-items: center; gap: 16px; min-height: 76px; padding: 14px 16px; border: 1px solid var(--ma-page-rule); cursor: pointer; font: 18px/1.4 Georgia, serif; }
+.film-selector label:has(:checked) { border-color: #c06855; background: #f2e8d20a; }
+.film-selector label:has(:focus-visible) { outline: 2px solid #f2e8d2; outline-offset: 4px; }
+.film-selector input { accent-color: #c06855; width: 18px; height: 18px; flex-shrink: 0; margin: 0; }
+.film-selector small { display: block; font: 11px/1.6 ui-sans-serif, system-ui, sans-serif; color: #c2b9a8; margin-top: 4px; }
+.film-number { color: #c2b9a8; font: 11px ui-monospace, monospace; }
+.film-unavailable { min-height: 220px; padding: 28px; border: 1px solid var(--ma-page-rule); font: 14px/1.7 ui-sans-serif, system-ui, sans-serif; }
+.film-caption p { min-width: 0; }
+@media (max-width: 650px) { .film-selector { grid-template-columns: 1fr; gap: 12px; } .film-selector label { font-size: 16px; } .film-heading { flex-wrap: wrap; } }
+@media (forced-colors: active) { .film-selector label:has(:checked) { border-color: Highlight; } }

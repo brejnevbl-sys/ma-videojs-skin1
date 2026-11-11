@@ -18,13 +18,12 @@ npm run dev
 - `/workbench/` — official workbench (sizes, aspect ratios, languages and playback options).
 - `/preview.html#width=240&ratio=16:9` — isolated narrow player.
 
-The player uses a bundled CC0 flower video from MDN, including an audio track.
-No API keys, account, external media request or network service is needed for playback.
-See [media attribution](apps/preview/public/media/ATTRIBUTION.md).
-
-The current sample is unchanged. See [replacing the film](docs/MEDIA.md) for the
-shared video/poster/credits configuration. Code is licensed under [Apache 2.0](LICENSE);
-third-party and media notices are retained in [NOTICE](NOTICE).
+The landing page selects two Pexels stock films, with creator credits and keyboard switching.
+Their files could not be downloaded in this environment (network 403); missing slots show an
+explicit unavailable message. No other footage is substituted. Follow [PEXELS.md](docs/PEXELS.md)
+to download the exact films, optimize MP4s and extract their separate posters.
+The unchanged MDN CC0 sample remains only in the technical preview/workbench.
+Code is licensed under [Apache 2.0](LICENSE); media rights are separate (see [NOTICE](NOTICE)).
 
 ## Validate
 
@@ -91,3 +90,5 @@ See [Milestone 3 report](docs/MILESTONE-3.md) for routing and mobile menu QA.
 The owner has confirmed the Milestone 1 Vercel demo. This branch contains Milestone 3
 for review; it has not been deployed or merged, and no contest submission or Mux bonus is claimed. The generated hosting configuration is retained for a
 later deployment; publishing the workbench requires a separate explicit request.
+
+See [Pexels implementation status and test boundaries](docs/PEXELS-IMPLEMENTATION.md).

@@ -1,5 +1,9 @@
+import { mockPexelsMedia } from './pexels-fixture';
 import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+
+test.beforeEach(async ({ page }) => { await mockPexelsMedia(page); });
+
 
 async function openPlayer(page: import('@playwright/test').Page, url = '/ma.html') {
   const errors: string[] = [];
@@ -125,7 +129,7 @@ test('reduced motion, bright/dark video surfaces, accessibility and screenshots'
 
 test('failed media opens the real error dialog and can be dismissed', async ({ page }) => {
   await page.route('**/media/flower.mp4', route => route.abort());
-  await page.goto('/ma.html');
+  await page.goto('/preview.html');
   const dialog = page.getByRole('alertdialog');
   await expect(dialog).toBeVisible();
   await expect(dialog).toContainText(/error|load|supported|play/i);
@@ -137,6 +141,7 @@ test('failed media opens the real error dialog and can be dismissed', async ({ p
 test('touch playback and menu dismissal on a phone', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   const page = await context.newPage();
+  await mockPexelsMedia(page);
   const video = await openPlayer(page, 'http://127.0.0.1:4173/ma.html');
   await page.getByRole('button', { name: 'Play', exact: true }).last().tap();
   await expect.poll(() => video.evaluate(v => v.currentTime)).toBeGreaterThan(0.1);
