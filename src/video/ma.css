@@ -158,7 +158,8 @@
   /* Short players retain a visible way back while the rate list scrolls. */
   .media-menu-content { overscroll-behavior: contain; scrollbar-width: auto; scroll-padding-block: 52px 8px; }
   .media-menu-content[data-submenu] > .media-menu-back-item { position: sticky; top: 0; z-index: 1; box-shadow: 0 1px 0 var(--ma-border); }
-  .media-menu-item, .media-menu-radio-item, .media-menu-back-item { min-height: 44px; border-radius: 2px; font-size: 13px; }
+  /* A slight popup scale transition must not shrink the actual touch target below 44px. */
+  .media-menu-item, .media-menu-radio-item, .media-menu-back-item { min-height: 46px; border-radius: 2px; font-size: 13px; }
   .media-menu-radio-item[aria-checked="true"] { background: var(--media-button-highlight); }
   .media-menu-hint { opacity: .85; font-variant-numeric: tabular-nums; }
   .media-tooltip-popup { --media-tooltip-side-offset: var(--ma-tooltip-offset); padding: 8px 10px; font-size: 11px; letter-spacing: .02em; }
