@@ -1,6 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Player } from '../frame/player';
+import { demoFilm } from '../media';
+import { sitePath } from '../site-path';
 import './style.css';
 
 function App() {
@@ -8,9 +10,9 @@ function App() {
     <>
       <a className="skip-link" href="#film">Skip to film</a>
       <header className="masthead">
-        <a className="wordmark" href="./ma.html" aria-label="MA home">MA<span lang="ja">間</span></a>
+        <a className="wordmark" href={sitePath('')} aria-label="MA home">MA<span lang="ja">間</span></a>
         <span className="eyebrow">The art of interval</span>
-        <a href="./">Skin workbench</a>
+        <a href={sitePath('workbench/')}>Skin workbench</a>
       </header>
       <main>
         <section className="introduction" aria-labelledby="title">
@@ -20,9 +22,16 @@ function App() {
             a little more room for the moving image.</p>
         </section>
         <section id="film" className="film" aria-label="Featured film" tabIndex={-1}>
-          <div className="film-heading"><span className="eyebrow">01 — In bloom</span><span>Take a moment.</span></div>
+          <div className="film-heading"><span className="eyebrow">01 — {demoFilm.title}</span><span>Take a moment.</span></div>
           <div className="player-frame"><Player media={{ autoPlay: false, muted: false, loop: false, preload: 'metadata' }} /></div>
-          <div className="film-caption"><p>A brief observation of flowers in the breeze.</p><a href="./media/ATTRIBUTION.md">Film: MDN · CC0</a></div>
+          <div className="film-caption"><p>{demoFilm.description}</p><a href={demoFilm.attribution.url}>{demoFilm.attribution.label}</a></div>
+        </section>
+        <section className="about-skin" aria-labelledby="about-title">
+          <h2 id="about-title">About the skin</h2>
+          <p>MA takes its name from the Japanese idea of the interval: the space that gives a moment its meaning.
+            A brushstroke traces time; open circles and quiet typography leave room for the image.</p>
+          <p>Built with Video.js 10.3.0. Skin source licensed under Apache 2.0.
+            Film credits: <a href={demoFilm.attribution.url}>{demoFilm.attribution.label}</a>.</p>
         </section>
         <aside className="notes" aria-label="Player keyboard shortcuts">
           <p><span lang="ja">間</span> The space between.</p>

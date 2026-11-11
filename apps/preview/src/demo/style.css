@@ -50,3 +50,8 @@ footer { padding-block: 24px; border-top: 1px solid var(--ma-page-rule); display
 }
 @media (prefers-contrast: more) { :root { --ma-page-rule: #f2e8d2; } }
 @media (forced-colors: active) { :root { --ma-page-rule: CanvasText; } }
+
+.about-skin { display: grid; grid-template-columns: 1fr 2fr; gap: 12px 48px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--ma-page-rule); }
+.about-skin h2 { grid-row: span 2; font: 400 24px Georgia, serif; margin: 0; }
+.about-skin p { margin: 0; max-width: 620px; font-size: 12px; line-height: 1.8; color: #c2b9a8; }
+@media (max-width: 760px) { .about-skin { grid-template-columns: 1fr; gap: 16px; margin-top: 32px; } }

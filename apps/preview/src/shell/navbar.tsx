@@ -3,6 +3,8 @@ import { Badge } from '@preview/shell/components/ui/badge';
 import { Button } from '@preview/shell/components/ui/button';
 import { useSidebar } from '@preview/shell/components/ui/sidebar';
 
+import { sitePath } from '../site-path';
+
 import { skin } from './config';
 
 type NavbarProps = {
@@ -26,6 +28,7 @@ export function Navbar({ previewUrl, optionsId }: NavbarProps) {
           <path fill="#cc3566" d="M0 187h209v22H0z" />
           <path d="M167.09 104.5L65.13 169.81V39.19l101.96 65.31z" fill="#ebe4c1" />
         </svg>
+        <a href={sitePath('')} aria-label="MA home" className="text-sm underline underline-offset-4">MA home</a>
         <h1 className="text-foreground truncate text-base font-semibold tracking-tight">{skin.name}</h1>
         <Badge variant="outline">
           {skin.frameworkLabel} · {skin.presetLabel}
