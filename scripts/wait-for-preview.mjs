@@ -1,4 +1,4 @@
-import { appendFileSync } from 'node:fs';
+import { appendFileSync, mkdirSync, writeFileSync } from 'node:fs';
 
 async function waitForPreview() {
   const url = process.env.MA_PREVIEW_URL;
@@ -12,6 +12,13 @@ async function waitForPreview() {
     const revision = html.match(/<meta\s+name="ma-revision"\s+content="([^"]+)"/i)?.[1];
     const destination = new URL(response.url);
     observed = `HTTP ${response.status}, revision=${revision ?? 'missing'}, destination=${destination.origin}${destination.pathname}`;
+    if (process.env.CI) {
+      mkdirSync('test-results/vercel', { recursive: true });
+      writeFileSync('test-results/vercel/deployment-access.json', JSON.stringify({
+        expected, revision: revision ?? null, status: response.status(),
+        destination: `${destination.origin}${destination.pathname}`,
+      }, null, 2));
+    }
     console.log(`Preview attempt ${attempt}: HTTP ${response.status}, revision=${revision ?? 'missing'}, expected=${expected}`);
     if (response.ok && revision === expected) process.exit(0);
     if (destination.origin !== new URL(url).origin) throw new Error(`Preview redirected outside the site without the expected revision: ${destination.origin}${destination.pathname}`);

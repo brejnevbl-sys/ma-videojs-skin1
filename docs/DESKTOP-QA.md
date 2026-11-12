@@ -90,7 +90,7 @@ https://ma-videojs-skin1-git-feat-ma-pexels-films-brejnevbl-sys.vercel.app/
 `scripts/wait-for-preview.mjs` сверяет невидимую meta `ma-revision` с SHA ветки PR,
 ожидая текущий Deployment, а не старый сайт. Авторизация и TLS не отключаются;
 401/403 приводят к явной ошибке. Результаты и фото Preview хранятся отдельно в
-`browser-results/vercel`, с его собственным results.json и сетевыми журналами.
+`vercel-preview-results`, с его собственным results.json и сетевыми журналами.
 Локальные MIME/Range не выдаются за проверку CDN; фактический статус Preview test
 отмечен отдельно в CI/итоговом отчёте.
 
@@ -98,7 +98,9 @@ https://ma-videojs-skin1-git-feat-ma-pexels-films-brejnevbl-sys.vercel.app/
 на `https://vercel.com/login`. Ready означает успешную сборку, но не публичный доступ.
 До изменения Deployment Protection владельцем проверка публичного Preview остаётся
 FAIL; её не пропускают ради зелёного CI. Запрос владельцу отправлен отдельно;
-настройки Vercel/production и секреты самостоятельно не менялись.
+настройки Vercel/production и секреты самостоятельно не менялись. Preview вынесен
+в отдельный job, активный только для ветки PR #7; чужие ветки/main не проверяются
+против её фиксированного URL. Отказ доступа сохраняется в deployment-access.json.
 
 ## Доказательства и ограничения
 
@@ -127,3 +129,12 @@ CSS API не объявляются проверенными. Лицензии A
 тех же разрешениях, zoom и 240/320/390px, при загруженном и недоступном шрифте.
 Font swap может добавить layout shift; отдельно проверить ширину header и высоту
 error dialog. См. [план совмещения](DESKTOP-PLAN.md).
+
+## Подтверждённый браузерный результат
+
+На коде `dcabd0a` CI [PR run 43220500439](https://github.com/brejnevbl-sys/ma-videojs-skin1/actions/runs/43220500439)
+подтвердил `npm ci`, TypeScript, build и Chromium 46 tests, а независимый job
+`desktop-engines` успешно выполнил оба набора Firefox/WebKit: **22/22**.
+Общий workflow остался FAIL исключительно на публичном Preview (login redirect).
+Последующие изменения организации CI не меняют UI и не отключают этот gate.
+Точные результаты последнего HEAD приведены в финальном отчёте/PR checks.
