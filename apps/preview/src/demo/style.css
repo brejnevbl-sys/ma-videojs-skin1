@@ -97,3 +97,11 @@ footer { padding-block: 24px; border-top: 1px solid var(--ma-page-rule); display
   .film-selector { margin-bottom: 12px; }
   .film-heading { padding-block: 8px; }
 }
+
+/* Short desktop and browser zoom: the main film remains in the first viewport. */
+@media (min-width: 761px) and (max-height: 620px) {
+  .masthead { padding-block: 18px; }
+  .introduction { padding: 24px 0 18px; }
+  .introduction > .eyebrow { margin-block-end: 12px; }
+  .introduction h1 { font-size: clamp(56px, 6vw, 78px); }
+}
