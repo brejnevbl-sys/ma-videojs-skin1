@@ -11,20 +11,6 @@ index 8fd1bbc..1858b39 100644
  		listen(media, "play", onPlaybackChange, { signal });
  		listen(media, "pause", onPlaybackChange, { signal });
  		listen(media, "ended", onPlaybackChange, { signal });
-diff --git a/node_modules/@videojs/core/dist/default/dom/ui/popover/popover.js b/node_modules/@videojs/core/dist/default/dom/ui/popover/popover.js
-index bed063c..d31baf5 100644
---- a/node_modules/@videojs/core/dist/default/dom/ui/popover/popover.js
-+++ b/node_modules/@videojs/core/dist/default/dom/ui/popover/popover.js
-@@ -176,7 +176,8 @@ function createPopover(options) {
- 			if (!options.openOnHover?.()) return;
- 			if (!canHover()) return;
- 			clearHoverTimeout();
--			if (state.current.active) return;
-+			// An ending popup must be allowed to reopen when the pointer returns.
-+			if (state.current.active && state.current.status !== "ending") return;
- 			const delay = options.delay?.() ?? 300;
- 			hoverTimeout = setTimeout(() => applyOpen("hover"), delay);
- 		},
 diff --git a/node_modules/@videojs/core/dist/dev/dom/store/features/controls.js b/node_modules/@videojs/core/dist/dev/dom/store/features/controls.js
 index 9ec84b1..5c88b02 100644
 --- a/node_modules/@videojs/core/dist/dev/dom/store/features/controls.js
@@ -38,17 +24,3 @@ index 9ec84b1..5c88b02 100644
  		listen(media, "play", onPlaybackChange, { signal });
  		listen(media, "pause", onPlaybackChange, { signal });
  		listen(media, "ended", onPlaybackChange, { signal });
-diff --git a/node_modules/@videojs/core/dist/dev/dom/ui/popover/popover.js b/node_modules/@videojs/core/dist/dev/dom/ui/popover/popover.js
-index ba8ab93..0b8e996 100644
---- a/node_modules/@videojs/core/dist/dev/dom/ui/popover/popover.js
-+++ b/node_modules/@videojs/core/dist/dev/dom/ui/popover/popover.js
-@@ -176,7 +176,8 @@ function createPopover(options) {
- 			if (!options.openOnHover?.()) return;
- 			if (!canHover()) return;
- 			clearHoverTimeout();
--			if (state.current.active) return;
-+			// An ending popup must be allowed to reopen when the pointer returns.
-+			if (state.current.active && state.current.status !== "ending") return;
- 			const delay = options.delay?.() ?? 300;
- 			hoverTimeout = setTimeout(() => applyOpen("hover"), delay);
- 		},

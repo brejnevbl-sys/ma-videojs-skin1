@@ -1,6 +1,6 @@
 # Video.js 10.3.0 interaction fixes
 
-`@videojs+core+10.3.0.patch` changes only the hover-entry guard in Video.js's
+`@videojs+core+10.3.0+001+hover-reopen.patch` changes only the hover-entry guard in Video.js's
 `createPopover`, in its development and production distributions. An active
 popover with status `ending` must be allowed to reopen. The existing `applyOpen`
 and dismiss-layer transition cancellation already support that state.
@@ -30,3 +30,8 @@ calculation now also runs on `emptied`, in both distributions. This keeps contro
 consistent with the reset native media without new playback state or custom timers.
 The desktop suite replays each real film and selects the next source while playing,
 then requires the native paused controls to be visible before the next Play click.
+
+The fixes are separate sequenced patches (001 hover, 002 controls reset). Extending
+one already-applied patch made a cached installation containing only the previous
+hover fix fail as partially applied. Separate patches support that cache, a clean
+`npm ci`, and a repeated postinstall; all three installation paths were checked.
