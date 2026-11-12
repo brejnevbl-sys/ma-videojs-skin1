@@ -63,7 +63,7 @@ The code honors standard media custom properties such as `--media-accent-color` 
 
 ## Compatibility, testing and limitations
 
-MA has been tested using real H.264 media and postimages (not only fixtures), playback/seek/replay, volume state, film switching, fullscreen, hover/keyboard/focus, 240–390 px mobile layouts, desktop layouts from 1280×720 to 2560×1440, and automatic axe accessibility checks. GitHub Actions runs Chromium and desktop Firefox/WebKit suites; a public Vercel Preview test checks the deployed revision and both real films.
+MA has been tested using real H.264 media and posters (not only fixtures), playback/seek/replay, volume state, film switching, fullscreen, hover/keyboard/focus, 240–390 px mobile layouts, desktop layouts from 1280×720 to 2560×1440, and automatic axe accessibility checks. GitHub Actions runs Chromium and desktop Firefox/WebKit suites; a public Vercel Preview test checks the deployed revision and both real films.
 
 **Do not confuse browser emulation with device certification:** physical iPhone/Safari, assistive technology and the complete range of browser versions have not been independently certified. We report tested engines and scenarios, not universal compatibility.
 
