@@ -7,6 +7,8 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    outputs:
+      failure_detail: ${{ steps.summary.outputs.failure_detail }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -22,9 +24,18 @@ jobs:
         env:
           PLAYWRIGHT_JSON_OUTPUT_FILE: test-results/results.json
       - run: node scripts/ci-summary.mjs
+        id: summary
         if: always()
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: browser-results
           path: test-results/
+
+  browser-diagnostics:
+    needs: validate
+    if: ${{ failure() && needs.validate.outputs.failure_detail != '' }}
+    name: "${{ needs.validate.outputs.failure_detail }}"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Full failure details are retained in the browser-results artifact and validate summary."

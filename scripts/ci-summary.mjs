@@ -14,6 +14,12 @@ if (process.env.GITHUB_STEP_SUMMARY && existsSync(reportPath)) {
     for (const child of suite.suites ?? []) walk(child);
   }
   for (const suite of report.suites ?? []) walk(suite);
+  if (process.env.GITHUB_OUTPUT) {
+    // A bounded plain-text result is also visible on the public workflow graph.
+    const brief = (failures[0] ?? 'No failing test in completed report')
+      .replace(/\u001b\[[0-9;]*m/g, '').replace(/\s+/g, ' ').slice(0, 700);
+    appendFileSync(process.env.GITHUB_OUTPUT, `failure_detail=${brief}\n`);
+  }
   const details = failures.slice(0, 10).map(text => `\n<pre>${text.slice(0, 5000).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>\n`).join('');
   appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## MA browser tests\n\n${report.stats?.expected ?? 0} passed; ${report.stats?.unexpected ?? 0} unexpected; ${report.stats?.skipped ?? 0} skipped.\n${details}`);
 }
