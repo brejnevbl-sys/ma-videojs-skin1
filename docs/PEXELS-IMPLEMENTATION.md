@@ -16,11 +16,13 @@ from Pexels was performed. Sources/creators are recorded in
 ## Actual-media QA
 
 See [the detailed PR #7 report](PR7-REAL-MEDIA-QA.md). `tests/real-films.spec.ts`
-contains **no route interception** and verifies both real films at 240/390/1440px:
+contains **no route interception** and verifies both real films at 240/320/390/1440px:
 real durations, decoded frames, native video dimensions, poster images and hashes,
 HTTP 206/MIME/range bytes, playback/pause, pointer and keyboard seek, fullscreen,
 source switching while playing, retained mute, node identity, layout and Axe.
-The original fixture-transport regressions remain explicitly labelled as synthetic.
+The touch test also uses both real MP4s. Other fixture-transport regressions remain explicitly labelled as synthetic.
+Console errors fail the actual-media tests. A separate deterministic regression covers
+hover re-entry during the volume popup exit; see patches/README.md.
 
 The original source-change idle-state issue was fixed by pausing before React
 updates src, ensuring Video.js receives the pause event. Media binaries are unchanged.

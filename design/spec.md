@@ -68,4 +68,5 @@ MA's existing typography and spacing. Cards stack at narrow widths and preserve
 native arrow-key navigation. Source changes reuse the Video.js container and media
 node when both slots are available, pause playback and reset native time.
 Unavailable assets show a clear message and original source link, never substitute
-footage. Actual Pexels files remain pending manual download; see docs/PEXELS.md.
+footage. Both real MP4s and matching JPG posters are committed; see docs/PEXELS.md
+and docs/PR7-REAL-MEDIA-QA.md for measured metadata and verification boundaries.

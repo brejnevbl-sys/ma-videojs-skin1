@@ -40,6 +40,9 @@ On Linux with a preinstalled Chromium, use
 On a fresh Linux runner, `npx playwright install --with-deps chromium` installs browser prerequisites.
 There is no configured lint script.
 
+`npm ci` applies a version-specific Video.js 10.3.0 hover fix using patch-package.
+Keep postinstall enabled; see [patch rationale and regression](patches/README.md).
+
 The browser suite covers real playback and replay, pause, timeline pointer/keyboard seeking,
 time display, mute/volume, fullscreen, settings/rate selection, Escape and focus return,
 status announcements, 240/320/390px players, touch, errors, reduced motion,

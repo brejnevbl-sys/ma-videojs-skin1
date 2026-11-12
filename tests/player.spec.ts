@@ -46,15 +46,23 @@ test('mute, volume, fullscreen and scoped keyboard shortcuts', async ({ page }) 
   await expect.poll(() => video.evaluate(v => v.muted)).toBe(false);
   // Leave and re-enter so this verifies a real hover after clicking the same trigger.
   await page.mouse.move(1, 1);
-  await page.getByRole('button', { name: 'Mute', exact: true }).hover();
+  const mute = page.getByRole('button', { name: 'Mute', exact: true });
+  await mute.hover();
+  // A closing popup is still visible but inert. Wait for the hover reopen before focusing it.
+  await expect(mute).toHaveAttribute('aria-expanded', 'true');
   const volume = page.getByRole('slider', { name: /volume/i });
   await expect(volume).toBeVisible();
   await volume.focus();
+  await expect(volume).toBeFocused();
   await page.keyboard.press('End');
   await page.keyboard.press('ArrowDown');
   await expect.poll(() => video.evaluate(v => v.volume)).toBeLessThan(1);
+  // End belongs to the volume thumb; it must not invoke the player's seek-to-end shortcut.
+  expect(await video.evaluate(v => v.currentTime)).toBe(0);
   await page.keyboard.press('Escape');
+  await expect(mute).toBeFocused();
   await page.locator('.media-skin').focus();
+  await expect(page.locator('.media-skin')).toBeFocused();
   await page.keyboard.press('m');
   await expect.poll(() => video.evaluate(v => v.muted)).toBe(true);
   await page.keyboard.press('Space');
@@ -141,7 +149,7 @@ test('failed media opens the real error dialog and can be dismissed', async ({ p
 test('touch playback and menu dismissal on a phone', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   const page = await context.newPage();
-  await mockPexelsMedia(page);
+  // This context plays both committed MP4s; it deliberately has no fixture routes.
   const video = await openPlayer(page, 'http://127.0.0.1:4173/ma.html');
   await page.getByRole('button', { name: 'Play', exact: true }).last().tap();
   await expect.poll(() => video.evaluate(v => v.currentTime)).toBeGreaterThan(0.1);
@@ -152,6 +160,17 @@ test('touch playback and menu dismissal on a phone', async ({ browser }) => {
   await expect(settings).toHaveAttribute('aria-expanded', 'true');
   await page.locator('h1').tap();
   await expect(settings).toHaveAttribute('aria-expanded', 'false');
+  await page.locator('.film-selector label').nth(1).tap();
+  await expect.poll(() => video.evaluate(v => v.currentSrc)).toContain('autumn-temple.mp4');
+  await expect.poll(() => video.evaluate(v => v.duration)).toBe(14);
+  await page.getByRole('button', { name: 'Play', exact: true }).last().tap();
+  await expect.poll(() => video.evaluate(v => v.currentTime)).toBeGreaterThan(.1);
+  await page.getByRole('button', { name: 'Pause', exact: true }).last().tap();
+  await expect.poll(() => video.evaluate(v => v.paused)).toBe(true);
+  await page.getByRole('button', { name: 'Enter fullscreen', exact: true }).tap();
+  await expect.poll(() => page.evaluate(() => !!document.fullscreenElement)).toBe(true);
+  await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).tap();
+  await expect.poll(() => page.evaluate(() => !!document.fullscreenElement)).toBe(false);
   await page.screenshot({ path: 'test-results/ma-phone.png', fullPage: true });
   await context.close();
 });
