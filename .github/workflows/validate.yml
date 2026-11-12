@@ -54,8 +54,9 @@ jobs:
       # Actions mounts this existing directory with a different owner; Firefox requires it to match its UID.
       - name: Fix container home ownership
         run: chown "$(id -u):$(id -g)" "$HOME"
-      # A single desktop owns native window focus/fullscreen at a time.
-      - run: npm run test:desktop:engines -- --reporter=line,json
+      # Native focus/fullscreen needs a foreground window; headless Firefox can lose widget focus after exit.
+      # The official image includes Xvfb. Assertions remain identical to the headless suite.
+      - run: xvfb-run --auto-servernum --server-args="-screen 0 2560x1440x24" npm run test:desktop:engines -- --headed --reporter=line,json
         env:
           PLAYWRIGHT_JSON_OUTPUT_FILE: test-results/results.json
       - run: node scripts/ci-summary.mjs

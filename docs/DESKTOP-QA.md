@@ -73,6 +73,10 @@ GET-запросом до выбора; оба фильма используют
 добавлен независимый job `desktop-engines` с `mcr.microsoft.com/playwright:v1.65.0-noble`:
 браузеры, кодеки и библиотеки включены в образ, apt не нужен. Владение существующим
 контейнерным HOME исправлено под его UID для запуска Firefox; переменная HOME не меняется.
+После повторного прогона обнаружена нестабильность headless Firefox: после выхода
+из fullscreen `document.hasFocus()` иногда оставался false несмотря на bringToFront.
+CI запускает тот же последовательный набор headed через Xvfb 2560×1440 из официального
+образа. DOM focus/fullscreen assertions не удалены, user activation не отключается.
 
 CI сохраняет `browser-results` и `desktop-engine-results`, включая JSON результатов,
 скриншоты, user-agent/версии, CSS capabilities, MIME/Range-ответы и console/page errors.
@@ -116,7 +120,9 @@ https://ma-videojs-skin1-git-feat-ma-pexels-films-brejnevbl-sys.vercel.app/
 [Chrome network](visuals/issue9/chrome-1366-network.json),
 [Edge network](visuals/issue9/edge-1366-network.json), [геометрия](visuals/issue9/layout.jsonl).
 
-Это автоматизированные Linux browser tests. macOS Safari, Windows Chrome/Edge,
+Это автоматизированные Linux browser tests; текущий Firefox/WebKit CI использует
+headed browsers на виртуальном X11-экране, Chrome/Edge проверялись headless.
+macOS Safari, Windows Chrome/Edge,
 ручные скринридеры и физический Android после этих изменений отдельно не проверялись.
 Мобильные viewport/touch-регрессии проходят; подтверждение владельца реального
 Android для исходного Preview записано в Issue #9. Старые версии без современных
