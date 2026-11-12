@@ -57,3 +57,16 @@ regressions for the brush's hit area and precise pointer seek, keyboard/tab orde
 discovery, idle/focus revival, forced colors, reduced motion, buffering and popup bounds.
 Capture desktop, phone, 240px, paused/playing, settings, focus, loading, errors and
 bright/dark frames. Record emulation separately from physical-device testing.
+
+## Pexels film selection
+
+The landing page now selects two explicitly credited stock films using a native
+radio group: primary Rainy Day (Roberto Lee Cortes), secondary Serene Japanese
+Temple in Autumn Forest (Hideyoshi isai). Ivory outlined cards, small ordinal
+numbers, restrained vermilion selection and an independent focus outline follow
+MA's existing typography and spacing. Cards stack at narrow widths and preserve
+native arrow-key navigation. Source changes reuse the Video.js container and media
+node when both slots are available, pause playback and reset native time.
+Unavailable assets show a clear message and original source link, never substitute
+footage. Both real MP4s and matching JPG posters are committed; see docs/PEXELS.md
+and docs/PR7-REAL-MEDIA-QA.md for measured metadata and verification boundaries.

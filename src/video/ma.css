@@ -134,7 +134,7 @@
   .video-controls-content:has(:focus-visible) :is(.video-controls-top, .video-controls-bottom, .video-controls-center) {
     opacity: 1;
     visibility: visible;
-    translate: 0;
+    translate: none;
     pointer-events: auto;
     transition-duration: 0ms;
   }
@@ -192,6 +192,10 @@
   @media (hover: hover) {
     .media-button:hover { border-color: var(--ma-border); background: var(--media-button-highlight); }
     .video-controls-center-play:hover::before { border-color: var(--media-accent); border-inline-end-color: transparent; }
+  }
+  @media (hover: hover) and (pointer: fine) {
+    /* Follow Video.js activity state; moving the mouse or focusing controls restores the cursor. */
+    :scope:has(.video-controls-content:not([data-visible])):not(:focus-within) { cursor: none; }
   }
   @media (pointer: coarse) {
     .video-controls-content:not([data-visible]) .video-controls-bottom { opacity: 1; visibility: visible; translate: 0; pointer-events: auto; }

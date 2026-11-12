@@ -1,0 +1,26 @@
+diff --git a/node_modules/@videojs/core/dist/default/dom/store/features/controls.js b/node_modules/@videojs/core/dist/default/dom/store/features/controls.js
+index 8fd1bbc..1858b39 100644
+--- a/node_modules/@videojs/core/dist/default/dom/store/features/controls.js
++++ b/node_modules/@videojs/core/dist/default/dom/store/features/controls.js
+@@ -132,6 +132,8 @@ const controlsFeature = definePlayerFeature({
+ 			if (isRecentCaptureRelease() && event instanceof MouseEvent && isPointInElement(container, event)) return;
+ 			setInactive();
+ 		}, { signal });
++		// Source loading can cancel a queued pause event; show controls for the reset media.
++		listen(media, "emptied", onPlaybackChange, { signal });
+ 		listen(media, "play", onPlaybackChange, { signal });
+ 		listen(media, "pause", onPlaybackChange, { signal });
+ 		listen(media, "ended", onPlaybackChange, { signal });
+diff --git a/node_modules/@videojs/core/dist/dev/dom/store/features/controls.js b/node_modules/@videojs/core/dist/dev/dom/store/features/controls.js
+index 9ec84b1..5c88b02 100644
+--- a/node_modules/@videojs/core/dist/dev/dom/store/features/controls.js
++++ b/node_modules/@videojs/core/dist/dev/dom/store/features/controls.js
+@@ -135,6 +135,8 @@ const controlsFeature = definePlayerFeature({
+ 			if (isRecentCaptureRelease() && event instanceof MouseEvent && isPointInElement(container, event)) return;
+ 			setInactive();
+ 		}, { signal });
++		// Source loading can cancel a queued pause event; show controls for the reset media.
++		listen(media, "emptied", onPlaybackChange, { signal });
+ 		listen(media, "play", onPlaybackChange, { signal });
+ 		listen(media, "pause", onPlaybackChange, { signal });
+ 		listen(media, "ended", onPlaybackChange, { signal });
