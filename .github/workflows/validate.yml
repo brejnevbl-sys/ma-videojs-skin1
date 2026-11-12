@@ -27,15 +27,43 @@ jobs:
         id: summary
         if: always()
       - uses: actions/upload-artifact@v4
-        if: failure()
+        if: always()
         with:
           name: browser-results
           path: test-results/
 
+  desktop-engines:
+    runs-on: ubuntu-latest
+    # Keep this image in sync with package-lock's Playwright version. It includes browser libraries/codecs,
+    # avoiding the unreliable Ubuntu apt mirrors and browser CDN installation step.
+    container: mcr.microsoft.com/playwright:v1.65.0-noble
+    outputs:
+      failure_detail: ${{ steps.summary.outputs.failure_detail }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+      - run: npm run test:desktop:engines -- --reporter=line,json
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_FILE: test-results/results.json
+      - run: node scripts/ci-summary.mjs
+        id: summary
+        if: always()
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: desktop-engine-results
+          path: test-results/
+
   browser-diagnostics:
-    needs: validate
-    if: ${{ failure() && needs.validate.outputs.failure_detail != '' }}
-    name: "${{ needs.validate.outputs.failure_detail }}"
+    needs: [validate, desktop-engines]
+    if: ${{ failure() && (needs.validate.outputs.failure_detail != '' || needs.desktop-engines.outputs.failure_detail != '') }}
+    name: "${{ needs.validate.outputs.failure_detail }} ${{ needs.desktop-engines.outputs.failure_detail }}"
     runs-on: ubuntu-latest
     steps:
       - run: echo "Full failure details are retained in the browser-results artifact and validate summary."

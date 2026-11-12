@@ -7,7 +7,7 @@ if (process.env.GITHUB_STEP_SUMMARY && existsSync(reportPath)) {
     for (const spec of suite.specs ?? []) for (const test of spec.tests ?? []) {
       for (const result of test.results ?? []) {
         if (['failed', 'timedOut', 'interrupted'].includes(result.status)) {
-          failures.push(`${spec.file}:${spec.line} — ${spec.title}\n${(result.errors ?? []).map(e => e.message ?? '').join('\n')}`);
+          failures.push(`[${test.projectName ?? test.projectId}] ${spec.file}:${spec.line} — ${spec.title}\n${(result.errors ?? []).map(e => e.message ?? '').join('\n')}`);
         }
       }
     }
@@ -16,7 +16,7 @@ if (process.env.GITHUB_STEP_SUMMARY && existsSync(reportPath)) {
   for (const suite of report.suites ?? []) walk(suite);
   if (process.env.GITHUB_OUTPUT) {
     // A bounded plain-text result is also visible on the public workflow graph.
-    const brief = (failures[0] ?? 'No failing test in completed report')
+    const brief = (failures[0] ?? '')
       .replace(/\u001b\[[0-9;]*m/g, '').replace(/\s+/g, ' ').slice(0, 700);
     appendFileSync(process.env.GITHUB_OUTPUT, `failure_detail=${brief}\n`);
   }

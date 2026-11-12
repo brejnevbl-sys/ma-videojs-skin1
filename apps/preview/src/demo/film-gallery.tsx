@@ -43,11 +43,13 @@ export function FilmGallery() {
       {assets[film.id] ? (
         <div className="player-frame"><Player mediaRef={mediaRef} film={film} media={{ autoPlay: false, loop: false, preload: 'metadata' }} /></div>
       ) : (
-        <div className="film-unavailable" role="status">
+        <div className="film-unavailable" data-checking={!checked ? '' : undefined} role="status">
           <p>{checked ? 'Film files are not installed yet.' : 'Checking film files…'}</p>
-          <p>{film.title} · {film.author}</p>
-          <p>Selected Pexels stock footage. No replacement video is being shown.</p>
-          <a href={film.source}>View the original on Pexels</a>
+          {checked && <>
+            <p>{film.title} · {film.author}</p>
+            <p>Selected Pexels stock footage. No replacement video is being shown.</p>
+            <a href={film.source}>View the original on Pexels</a>
+          </>}
         </div>
       )}
       <div className="film-caption" aria-live="polite">

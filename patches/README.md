@@ -1,4 +1,4 @@
-# Video.js 10.3.0 hover reopen fix
+# Video.js 10.3.0 interaction fixes
 
 `@videojs+core+10.3.0.patch` changes only the hover-entry guard in Video.js's
 `createPopover`, in its development and production distributions. An active
@@ -22,3 +22,11 @@ reopening, actual slider focus, volume Home/End without seeking, Escape focus re
 and Space playback. It uses the committed MP4, without route interception.
 The original keyboard test additionally waits for `aria-expanded=true` and asserts
 focus and unchanged media time; the Space assertions and timeouts remain intact.
+
+Issue #9 also reproduced hidden controls after Replay followed by source switching.
+`HTMLMediaElement.load()` can cancel the queued native pause event; playback resets,
+but the controls feature only listened to play/pause/ended. Its existing visibility
+calculation now also runs on `emptied`, in both distributions. This keeps controls
+consistent with the reset native media without new playback state or custom timers.
+The desktop suite replays each real film and selects the next source while playing,
+then requires the native paused controls to be visible before the next Play click.
