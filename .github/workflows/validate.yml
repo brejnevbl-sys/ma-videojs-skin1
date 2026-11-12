@@ -8,7 +8,7 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     outputs:
-      failure_detail: ${{ steps.summary.outputs.failure_detail }}
+      failure_detail: ${{ steps.summary.outputs.failure_detail || steps.preview-summary.outputs.failure_detail || steps.preview.outputs.failure_detail }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -26,6 +26,20 @@ jobs:
       - run: node scripts/ci-summary.mjs
         id: summary
         if: always()
+      - name: Test current Vercel Preview with real media
+        id: preview
+        env:
+          MA_PREVIEW_URL: https://ma-videojs-skin1-git-feat-ma-pexels-films-brejnevbl-sys.vercel.app/
+          MA_EXPECTED_REVISION: ${{ github.event.pull_request.head.sha || github.sha }}
+          PLAYWRIGHT_JSON_OUTPUT_FILE: test-results/vercel/results.json
+        run: |
+          node scripts/wait-for-preview.mjs
+          npx playwright test tests/desktop.spec.ts --project=chromium --output=test-results/vercel --reporter=line,json
+      - run: node scripts/ci-summary.mjs
+        id: preview-summary
+        if: always()
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_FILE: test-results/vercel/results.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

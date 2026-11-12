@@ -84,8 +84,11 @@ for (const size of sizes) {
     const skin = (await page.locator('.media-skin').boundingBox())!;
     for (const control of await page.locator('.video-controls-top button:visible, .video-controls-bottom button:visible').all()) {
       const box = (await control.boundingBox())!;
-      expect(box.width).toBeGreaterThanOrEqual(44);
-      expect(box.height).toBeGreaterThanOrEqual(44);
+      const cssSize = await control.evaluate(e => [parseFloat(getComputedStyle(e).width), parseFloat(getComputedStyle(e).height)]);
+      expect(cssSize.every(value => value >= 44)).toBe(true);
+      // Firefox rect subtraction can produce 43.999996px for an exact 44px CSS target.
+      expect(Number(box.width.toFixed(3))).toBeGreaterThanOrEqual(44);
+      expect(Number(box.height.toFixed(3))).toBeGreaterThanOrEqual(44);
       expect(box.x).toBeGreaterThanOrEqual(skin.x);
       expect(box.x + box.width).toBeLessThanOrEqual(skin.x + skin.width + 1);
     }

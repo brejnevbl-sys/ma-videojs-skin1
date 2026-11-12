@@ -11,7 +11,15 @@ export default defineConfig({
   root: path('./apps/preview'),
   // Root deployment; all nested workbench/media URLs share this base.
   base: '/',
-  plugins: [tailwindcss(), react()],
+  plugins: [tailwindcss(), react(), {
+    name: 'ma-build-revision',
+    // Invisible deployment provenance, so Preview QA cannot accidentally test an older branch build.
+    transformIndexHtml: () => [{
+      tag: 'meta',
+      attrs: { name: 'ma-revision', content: process.env.VERCEL_GIT_COMMIT_SHA ?? process.env.GITHUB_SHA ?? 'local' },
+      injectTo: 'head',
+    }],
+  }],
   resolve: {
     alias: {
       '@preview': path('./apps/preview/src'),

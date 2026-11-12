@@ -40,6 +40,10 @@ On Linux with a preinstalled Chromium, use
 On a fresh Linux runner, `npx playwright install --with-deps chromium` installs browser prerequisites.
 There is no configured lint script.
 
+Desktop/browser QA for Issue #9: [results, screenshots and boundaries](docs/DESKTOP-QA.md).
+`npm run test:desktop:engines` runs the unmocked desktop suite in Firefox/WebKit.
+CI also tests the current Vercel Preview after verifying its build SHA; reports are retained as artifacts.
+
 `npm ci` applies a version-specific Video.js 10.3.0 hover fix using patch-package.
 Keep postinstall enabled; see [patch rationale and regression](patches/README.md).
 

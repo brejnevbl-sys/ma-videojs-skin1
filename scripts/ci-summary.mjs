@@ -1,5 +1,5 @@
 import { appendFileSync, existsSync, readFileSync } from 'node:fs';
-const reportPath = 'test-results/results.json';
+const reportPath = process.env.PLAYWRIGHT_JSON_OUTPUT_FILE ?? 'test-results/results.json';
 if (process.env.GITHUB_STEP_SUMMARY && existsSync(reportPath)) {
   const report = JSON.parse(readFileSync(reportPath, 'utf8'));
   const failures = [];
@@ -16,7 +16,13 @@ if (process.env.GITHUB_STEP_SUMMARY && existsSync(reportPath)) {
   for (const suite of report.suites ?? []) walk(suite);
   if (process.env.GITHUB_OUTPUT) {
     // A bounded plain-text result is also visible on the public workflow graph.
-    const brief = (failures[0] ?? '')
+    const seen = new Set();
+    const brief = failures.filter(text => {
+      const project = text.match(/^\[[^\]]+\]/)?.[0];
+      if (seen.has(project)) return false;
+      seen.add(project);
+      return true;
+    }).map(text => text.slice(0, 350)).join(' | ')
       .replace(/\u001b\[[0-9;]*m/g, '').replace(/\s+/g, ' ').slice(0, 700);
     appendFileSync(process.env.GITHUB_OUTPUT, `failure_detail=${brief}\n`);
   }
