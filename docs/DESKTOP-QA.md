@@ -96,8 +96,9 @@ https://ma-videojs-skin1-git-feat-ma-pexels-films-brejnevbl-sys.vercel.app/
 
 Независимая проверка CI установила **Vercel Authentication**: Preview перенаправляет
 на `https://vercel.com/login`. Ready означает успешную сборку, но не публичный доступ.
-До изменения Deployment Protection владельцем проверка публичного Preview остаётся
-FAIL; её не пропускают ради зелёного CI. Запрос владельцу отправлен отдельно;
+На проверке `5a1a954` публичный Preview получил FAIL из-за этого перенаправления;
+проверку не пропускают ради зелёного CI. Последний job отражает актуальное состояние
+доступа после возможных изменений Deployment Protection владельцем. Запрос владельцу отправлен отдельно;
 настройки Vercel/production и секреты самостоятельно не менялись. Preview вынесен
 в отдельный job, активный только для ветки PR #7; чужие ветки/main не проверяются
 против её фиксированного URL. Отказ доступа сохраняется в deployment-access.json.
@@ -138,3 +139,15 @@ error dialog. См. [план совмещения](DESKTOP-PLAN.md).
 Общий workflow остался FAIL исключительно на публичном Preview (login redirect).
 Последующие изменения организации CI не меняют UI и не отключают этот gate.
 Точные результаты последнего HEAD приведены в финальном отчёте/PR checks.
+
+### Подтверждение на `5a1a954`
+
+[PR run 43222400301](https://github.com/brejnevbl-sys/ma-videojs-skin1/actions/runs/43222400301):
+
+- [validate](https://github.com/brejnevbl-sys/ma-videojs-skin1/actions/runs/43222400301/job/131196932250) — PASS: install, TypeScript, build, Chromium **46/46**.
+- [desktop-engines](https://github.com/brejnevbl-sys/ma-videojs-skin1/actions/runs/43222400301/job/131196932714) — PASS: Firefox/WebKit **22/22**, включая оба настоящих MP4, pointer volume после scroll, native fullscreen, Replay и Axe.
+- `vercel-preview` — FAIL на доступе: `Preview redirected outside the site without the expected revision: https://vercel.com/login`. Публичные browser/media тесты не объявляются выполненными.
+
+Локально Chrome 157 и Edge 155 прошли desktop-проверки; физические Windows/macOS/iOS
+и новый физический Android run не подменяются Linux headless/emulation. Vercel bot
+сообщил Ready для Deployment `DyPpEAqovp4a1Ky9u1MjpKnP8tar`; Ready не отменяет login gate.

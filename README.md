@@ -43,7 +43,7 @@ There is no configured lint script.
 Desktop/browser QA for Issue #9: [results, screenshots and boundaries](docs/DESKTOP-QA.md).
 `npm run test:desktop:engines` runs the unmocked desktop suite in Firefox/WebKit.
 A separate CI job tests PR #7’s Vercel Preview after verifying its build SHA; reports are retained as artifacts.
-Preview currently redirects unauthenticated visitors to Vercel login; its access check remains failing until the owner changes Preview protection.
+Preview access is an explicit CI gate. Initial runs detected Vercel Authentication; the latest vercel-preview job records the current access result.
 
 `npm ci` applies a version-specific Video.js 10.3.0 hover fix using patch-package.
 Keep postinstall enabled; see [patch rationale and regression](patches/README.md).
