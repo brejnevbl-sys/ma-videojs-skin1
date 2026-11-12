@@ -134,7 +134,7 @@
   .video-controls-content:has(:focus-visible) :is(.video-controls-top, .video-controls-bottom, .video-controls-center) {
     opacity: 1;
     visibility: visible;
-    translate: 0;
+    translate: none;
     pointer-events: auto;
     transition-duration: 0ms;
   }

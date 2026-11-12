@@ -142,6 +142,11 @@ for (const width of [1366, 1920]) {
       await page.keyboard.press('End');
       await expect.poll(() => video.evaluate(v => v.volume)).toBe(1);
       const volumeBox = (await page.locator('.media-volume-slider').boundingBox())!;
+      const popupPosition = await page.locator('.media-volume-popover-popup').evaluate(e => ({
+        top: getComputedStyle(e).top, bottom: getComputedStyle(e).bottom, scroll: scrollY,
+        triggerY: document.querySelector('.media-mute-button')!.getBoundingClientRect().y,
+      }));
+      await expect(volume, `Volume viewport box=${JSON.stringify(volumeBox)} popup=${JSON.stringify(popupPosition)}`).toBeInViewport({ ratio: 1 });
       const hit = await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.className, { x: volumeBox.x + volumeBox.width / 2, y: volumeBox.y + volumeBox.height / 2 });
       await page.mouse.click(volumeBox.x + volumeBox.width / 2, volumeBox.y + volumeBox.height / 2);
       await expect.poll(() => video.evaluate(v => v.volume)).toBeGreaterThan(.2);
@@ -168,6 +173,8 @@ for (const width of [1366, 1920]) {
       await page.keyboard.press('Escape');
       await page.keyboard.press('Escape');
       await expect(settings).toBeFocused();
+      await page.bringToFront();
+      await expect.poll(() => page.evaluate(() => document.hasFocus())).toBe(true);
       await page.getByRole('button', { name: 'Enter fullscreen', exact: true }).click();
       await expect.poll(() => page.evaluate(() => !!document.fullscreenElement)).toBe(true);
       if (!index) await page.screenshot({ path: info.outputPath(`${info.project.name}-${width}-fullscreen.png`) });

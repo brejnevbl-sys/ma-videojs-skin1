@@ -14,28 +14,28 @@
   "errors": [],
   "network": [
     {
-      "path": "/media/pexels/rainy-day.mp4",
-      "method": "HEAD",
-      "status": 200,
-      "type": "video/mp4"
-    },
-    {
       "path": "/media/pexels/rainy-day.jpg",
       "method": "HEAD",
       "status": 200,
       "type": "image/jpeg"
     },
     {
-      "path": "/media/pexels/autumn-temple.mp4",
+      "path": "/media/pexels/autumn-temple.jpg",
+      "method": "HEAD",
+      "status": 200,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "/media/pexels/rainy-day.mp4",
       "method": "HEAD",
       "status": 200,
       "type": "video/mp4"
     },
     {
-      "path": "/media/pexels/autumn-temple.jpg",
+      "path": "/media/pexels/autumn-temple.mp4",
       "method": "HEAD",
       "status": 200,
-      "type": "image/jpeg"
+      "type": "video/mp4"
     },
     {
       "path": "/media/pexels/rainy-day.jpg",
@@ -75,7 +75,7 @@
       "method": "GET",
       "status": 206,
       "type": "video/mp4",
-      "range": "bytes 1081344-1108776/1108777"
+      "range": "bytes 589824-1108776/1108777"
     }
   ]
 }

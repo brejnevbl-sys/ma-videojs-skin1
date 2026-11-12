@@ -1,0 +1,26 @@
+diff --git a/node_modules/@videojs/core/dist/default/dom/utils/layout.js b/node_modules/@videojs/core/dist/default/dom/utils/layout.js
+--- a/node_modules/@videojs/core/dist/default/dom/utils/layout.js
++++ b/node_modules/@videojs/core/dist/default/dom/utils/layout.js
+@@ -41,7 +41,8 @@
+ }
+ /** @internal */
+ function getPositioningBoundaryRect(boundaryElement) {
+-	const viewportRect = document.documentElement.getBoundingClientRect();
++	// A scrolling document rect is not the viewport (its top is -scrollY and its height is the whole page).
++	const viewportRect = createDOMRect(0, 0, document.documentElement.clientWidth, document.documentElement.clientHeight);
+ 	return boundaryElement ? intersectDOMRects(viewportRect, boundaryElement.getBoundingClientRect()) : viewportRect;
+ }
+ /** @internal */
+diff --git a/node_modules/@videojs/core/dist/dev/dom/utils/layout.js b/node_modules/@videojs/core/dist/dev/dom/utils/layout.js
+--- a/node_modules/@videojs/core/dist/dev/dom/utils/layout.js
++++ b/node_modules/@videojs/core/dist/dev/dom/utils/layout.js
+@@ -41,7 +41,8 @@
+ }
+ /** @internal */
+ function getPositioningBoundaryRect(boundaryElement) {
+-	const viewportRect = document.documentElement.getBoundingClientRect();
++	// A scrolling document rect is not the viewport (its top is -scrollY and its height is the whole page).
++	const viewportRect = createDOMRect(0, 0, document.documentElement.clientWidth, document.documentElement.clientHeight);
+ 	return boundaryElement ? intersectDOMRects(viewportRect, boundaryElement.getBoundingClientRect()) : viewportRect;
+ }
+ /** @internal */

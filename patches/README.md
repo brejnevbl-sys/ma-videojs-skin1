@@ -35,3 +35,9 @@ The fixes are separate sequenced patches (001 hover, 002 controls reset). Extend
 one already-applied patch made a cached installation containing only the previous
 hover fix fail as partially applied. Separate patches support that cache, a clean
 `npm ci`, and a repeated postinstall; all three installation paths were checked.
+
+Issue #9 adds patch 003: popup viewport bounds use (0,0,clientWidth,clientHeight),
+not the scrolling document rectangle (whose top is -scrollY and height is the
+whole page). Container bounds are still intersected with the actual viewport.
+The desktop suite requires the volume thumb to remain in view before a real
+mouse click, and checks that mouse volume changes do not seek.
