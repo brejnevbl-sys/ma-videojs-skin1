@@ -13,18 +13,20 @@
   in the separate technical preview/workbench, clearly documented as a fixture.
 - Manual download/optimization/poster instructions: [PEXELS.md](PEXELS.md).
 
-## External blocker
+## Media transfer resolved; production QA pending
 
-The cloud proxy returned 403 CONNECT failures for both supplied Pexels pages and
-/license/. No source MP4 or matching poster was downloaded, transcoded or verified.
-The requested durations 60/14 seconds and creators are user-supplied metadata, not
-independently measured file properties. The stock films are not MA cinematography.
-Their Pexels License is separate from Apache 2.0 on the code; review live terms at
-manual download time and keep the records in public/media/pexels/ATTRIBUTION.md.
+The four selected Pexels assets have now been added to `feat/ma-pexels-films`
+in commit `cfb0f44` by ChatGPT using the owner's uploaded stock originals.
+`rainy-day.mp4`: H.264, 1280×720, 60.143 seconds; `autumn-temple.mp4`:
+H.264, 960×540, 14.0 seconds. Each file has a matching JPG poster.
+The original 403 error affected Codex's remote proxy, not the rights of the
+supplied files. Assets are available in Git, and their blob hashes match the
+original prepared binaries. Media provenance and attribution remain separate
+from Apache 2.0; review the current Pexels terms before submission.
 
-Until all four local files are supplied, the landing shows the availability message
-rather than a functioning replacement film. Do not deploy this branch expecting
-completed Pexels playback; existing production is not altered by a manual deploy here.
+**Still pending:** successful CI browser tests with the assets present, live Vercel
+HTTP `video/mp4` and range-response verification, both films' playback on Android,
+and final contest license and submission checks. Do not mark production QA complete.
 
 ## Validation
 
@@ -39,7 +41,8 @@ completed Pexels playback; existing production is not altered by a manual deploy
 
 Tests needing the two slots intercept local Pexels-path requests with the existing
 MDN fixture bytes **only inside Playwright**, with real HTTP byte-range semantics.
-They prove player behavior with native media, not that Pexels films were obtained,
-that they run for 60/14 seconds, or that their real audio/codec/licensing works.
-No fixture transport is shipped to the application. Technical preview tests still
-play the original local MDN file normally. Real-device and real-film QA remain pending.
+They prove player behavior with native media but do not independently verify the
+Pexels files' playback in production or their permissions. The actual compressed
+assets have now been added and their local codec/durations measured. No fixture
+transport ships to production. The technical preview still uses MDN. Real-device
+and real-film production QA remain pending.
