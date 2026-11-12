@@ -15,7 +15,7 @@ async function waitForPreview() {
     if (process.env.CI) {
       mkdirSync('test-results/vercel', { recursive: true });
       writeFileSync('test-results/vercel/deployment-access.json', JSON.stringify({
-        expected, revision: revision ?? null, status: response.status(),
+        expected, revision: revision ?? null, status: response.status,
         destination: `${destination.origin}${destination.pathname}`,
       }, null, 2));
     }
