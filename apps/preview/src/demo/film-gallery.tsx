@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Player } from '../frame/player';
 import { films } from '../films';
 
 export function FilmGallery() {
+  const mediaRef = useRef<HTMLVideoElement>(null);
   const [selected, setSelected] = useState(films[0].id);
   const [assets, setAssets] = useState<Record<string, boolean>>({});
   const [checked, setChecked] = useState(false);
@@ -28,7 +29,11 @@ export function FilmGallery() {
         {films.map((item, index) => (
           <label key={item.id}>
             <input type="radio" name="film" value={item.id} checked={item.id === selected}
-              onChange={() => setSelected(item.id)} />
+              onChange={() => {
+                // Pause the old source before React changes src, so Video.js receives its pause event.
+                mediaRef.current?.pause();
+                setSelected(item.id);
+              }} />
             <span className="film-number" aria-hidden="true">0{index + 1}</span>
             <span>{item.title}<small>{item.author}</small></span>
           </label>
@@ -36,7 +41,7 @@ export function FilmGallery() {
       </fieldset>
       <div className="film-heading"><span className="eyebrow">{film.title}</span><span>Take a moment.</span></div>
       {assets[film.id] ? (
-        <div className="player-frame"><Player film={film} media={{ autoPlay: false, loop: false, preload: 'metadata' }} /></div>
+        <div className="player-frame"><Player mediaRef={mediaRef} film={film} media={{ autoPlay: false, loop: false, preload: 'metadata' }} /></div>
       ) : (
         <div className="film-unavailable" role="status">
           <p>{checked ? 'Film files are not installed yet.' : 'Checking film files…'}</p>
@@ -46,7 +51,7 @@ export function FilmGallery() {
         </div>
       )}
       <div className="film-caption" aria-live="polite">
-        <p>{film.description}</p><a href={film.attribution.url}>{film.attribution.label}</a>
+        <p>{film.description}{film.silent && <span> Silent film · no audio.</span>}</p><a href={film.attribution.url}>{film.attribution.label}</a>
       </div>
     </>
   );

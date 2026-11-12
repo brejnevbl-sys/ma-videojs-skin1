@@ -19,9 +19,9 @@ npm run dev
 - `/preview.html#width=240&ratio=16:9` — isolated narrow player.
 
 The landing page selects two Pexels stock films, with creator credits and keyboard switching.
-Their files could not be downloaded in this environment (network 403); missing slots show an
-explicit unavailable message. No other footage is substituted. Follow [PEXELS.md](docs/PEXELS.md)
-to download the exact films, optimize MP4s and extract their separate posters.
+The four real media files are committed and verified locally: Rainy Day (60.143s) and
+Serene Japanese Temple in Autumn Forest (14.000s), each with a separate poster.
+Both films are silent (no audio streams). See [real-media QA](docs/PR7-REAL-MEDIA-QA.md).
 The unchanged MDN CC0 sample remains only in the technical preview/workbench.
 Code is licensed under [Apache 2.0](LICENSE); media rights are separate (see [NOTICE](NOTICE)).
 
