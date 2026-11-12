@@ -147,8 +147,8 @@ for (const width of [1366, 1920]) {
       await expect.poll(() => video.evaluate(v => v.volume)).toBeGreaterThan(.2);
       try { await expect.poll(() => video.evaluate(v => v.volume)).toBeLessThan(.8); }
       catch (error) {
-        const trace = await page.evaluate(() => (window as Window & { maPointers?: unknown[] }).maPointers);
-        throw new Error(`Volume pointer hit=${String(hit)}, box=${JSON.stringify(volumeBox)}, events=${JSON.stringify(trace)}; ${String(error)}`);
+        const trace = await page.evaluate(() => (window as Window & { maPointers?: unknown[] }).maPointers?.slice(-2));
+        throw new Error(`Volume pointer hit=${String(hit)}, events=${JSON.stringify(trace)}, box=${JSON.stringify(volumeBox)}; ${String(error)}`);
       }
       expect(await video.evaluate(v => v.currentTime)).toBe(oldTime);
       if (!index) await shot(page, info, width, 'volume');
