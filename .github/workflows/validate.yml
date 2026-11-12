@@ -2,6 +2,9 @@ name: Validate MA
 on:
   push:
   pull_request:
+concurrency:
+  group: ma-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
@@ -78,9 +81,17 @@ jobs:
           path: test-results/
 
   browser-diagnostics:
-    needs: [validate, desktop-engines]
-    if: ${{ failure() && (needs.validate.outputs.failure_detail != '' || needs.desktop-engines.outputs.failure_detail != '') }}
-    name: "${{ needs.validate.outputs.failure_detail }} ${{ needs.desktop-engines.outputs.failure_detail }}"
+    needs: validate
+    if: ${{ failure() && needs.validate.outputs.failure_detail != '' }}
+    name: "${{ needs.validate.outputs.failure_detail }}"
     runs-on: ubuntu-latest
     steps:
       - run: echo "Full failure details are retained in the browser-results artifact and validate summary."
+
+  engine-diagnostics:
+    needs: desktop-engines
+    if: ${{ failure() && needs.desktop-engines.outputs.failure_detail != '' }}
+    name: "${{ needs.desktop-engines.outputs.failure_detail }}"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Full engine failure details are retained in the desktop-engine-results artifact."

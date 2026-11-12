@@ -18,7 +18,13 @@ const audits = new WeakMap<Page, { errors: string[]; network: NetworkRecord[] }>
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
     const values: number[] = [];
-    Object.assign(window, { maLayoutShifts: values });
+    const pointers: unknown[] = [];
+    Object.assign(window, { maLayoutShifts: values, maPointers: pointers });
+    for (const type of ['pointerdown', 'pointerup']) document.addEventListener(type, event => {
+      const e = event as PointerEvent;
+      pointers.push({ type, target: (e.target as HTMLElement).className, x: e.clientX, y: e.clientY, volume: document.querySelector('video')?.volume });
+      if (pointers.length > 10) pointers.shift();
+    }, true);
     if (PerformanceObserver.supportedEntryTypes.includes('layout-shift')) {
       new PerformanceObserver(list => {
         for (const entry of list.getEntries() as (PerformanceEntry & { hadRecentInput: boolean; value: number })[]) {
@@ -136,9 +142,14 @@ for (const width of [1366, 1920]) {
       await page.keyboard.press('End');
       await expect.poll(() => video.evaluate(v => v.volume)).toBe(1);
       const volumeBox = (await page.locator('.media-volume-slider').boundingBox())!;
+      const hit = await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.className, { x: volumeBox.x + volumeBox.width / 2, y: volumeBox.y + volumeBox.height / 2 });
       await page.mouse.click(volumeBox.x + volumeBox.width / 2, volumeBox.y + volumeBox.height / 2);
       await expect.poll(() => video.evaluate(v => v.volume)).toBeGreaterThan(.2);
-      await expect.poll(() => video.evaluate(v => v.volume)).toBeLessThan(.8);
+      try { await expect.poll(() => video.evaluate(v => v.volume)).toBeLessThan(.8); }
+      catch (error) {
+        const trace = await page.evaluate(() => (window as Window & { maPointers?: unknown[] }).maPointers);
+        throw new Error(`Volume pointer hit=${String(hit)}, box=${JSON.stringify(volumeBox)}, events=${JSON.stringify(trace)}; ${String(error)}`);
+      }
       expect(await video.evaluate(v => v.currentTime)).toBe(oldTime);
       if (!index) await shot(page, info, width, 'volume');
       await page.keyboard.press('Escape');
