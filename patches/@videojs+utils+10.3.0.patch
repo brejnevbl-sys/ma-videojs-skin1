@@ -1,0 +1,16 @@
+diff --git a/node_modules/@videojs/utils/dist/dom/supports.js b/node_modules/@videojs/utils/dist/dom/supports.js
+index 09da84c..441e5e8 100644
+--- a/node_modules/@videojs/utils/dist/dom/supports.js
++++ b/node_modules/@videojs/utils/dist/dom/supports.js
+@@ -9,7 +9,10 @@ function supportsAnimationFrame() {
+ }
+ /** @internal */
+ function supportsAnchorPositioning() {
+-	return typeof CSS !== "undefined" && CSS.supports("anchor-name: --a");
++	// WebKit resolves fixed top-layer anchors in document coordinates after scrolling.
++	// Use the existing manual viewport-positioning fallback until that engine bug is fixed.
++	const webkit = typeof navigator !== "undefined" && /AppleWebKit/.test(navigator.userAgent) && !/Chrome|Chromium|Edg\//.test(navigator.userAgent);
++	return !webkit && typeof CSS !== "undefined" && CSS.supports("anchor-name: --a");
+ }
+ /** @internal */
+ function supportsPopoverAPI() {

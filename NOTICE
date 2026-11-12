@@ -9,7 +9,8 @@ Upstream notice: docs/VIDEOJS-LICENSE.txt
 Source: https://github.com/videojs/video.js
 Video.js is a registered trademark of Brightcove Inc.; no endorsement is implied.
 Local Video.js 10.3.0 modifications to the hover guard, controls reset and viewport
-bounds are recorded in patches/ and documented in patches/README.md.
+bounds, plus the WebKit anchor positioning fallback in @videojs/utils, are recorded
+in patches/ and documented in patches/README.md.
 
 Third-party packages and installed agent skills retain their own license notices.
 The bundled MDN flower video and derived poster are CC0, separately from the

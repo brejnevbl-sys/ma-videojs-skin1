@@ -41,3 +41,11 @@ not the scrolling document rectangle (whose top is -scrollY and height is the
 whole page). Container bounds are still intersected with the actual viewport.
 The desktop suite requires the volume thumb to remain in view before a real
 mouse click, and checks that mouse volume changes do not seek.
+
+The additional `@videojs+utils+10.3.0.patch` disables native CSS anchor positioning
+for WebKit, identified by its WebKit user agent without Blink's Chrome/Chromium/Edg
+tokens. That engine resolves fixed top-layer anchors against document coordinates
+after page scroll (the measured error was exactly scrollY). CSS.supports accepts the
+syntax, so it cannot detect this behavioral failure. Video.js's existing manual
+viewport positioning/resize/scroll tracking is used instead. Other engines keep
+native positioning. Review this compatibility workaround when upgrading Video.js/WebKit.

@@ -23,6 +23,12 @@ Preview этой ревизии. Новый PR, merge, ручной production d
   всей страницы); видимые controls больше не создают лишний fixed containing block
   через нулевой translate. Проверены
   старый кэш → обновление, чистый npm ci и повторный postinstall. См. patches/README.md.
+- В WebKit обнаружен отдельный CSS anchor bug после scroll: popup смещался ровно
+  на scrollY. Для этого движка используется существующий manual-positioning fallback
+  Video.js; новый таймер/слайдер не добавлен. Подробности определения движка и патча
+  `@videojs/utils` — в patches/README.md. Проверка реального попадания мышью сохранена.
+- Native fullscreen проверяется через standard/prefixed API. Desktop engine job
+  работает последовательно, чтобы сценарии не конкурировали за фокус окна.
 
 ## Фактически выполнено локально
 

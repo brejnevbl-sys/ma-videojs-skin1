@@ -48,12 +48,16 @@ test.afterEach(async ({ page, browser }, info) => {
     userAgent: navigator.userAgent,
     scope: 'CSSScopeRule' in window, has: CSS.supports('selector(:has(*))'),
     mask: CSS.supports('mask-image', 'url("")'), clip: CSS.supports('clip-path', 'inset(0)'),
-    containerQueries: CSS.supports('container-type', 'inline-size'), fullscreen: document.fullscreenEnabled,
+    containerQueries: CSS.supports('container-type', 'inline-size'), fullscreen: document.fullscreenEnabled ?? (document as Document & { webkitFullscreenEnabled?: boolean }).webkitFullscreenEnabled,
     h264: document.createElement('video').canPlayType('video/mp4; codecs="avc1.42E01E"'),
   }));
   await writeFile(info.outputPath('browser-network.json'), JSON.stringify({ engine: info.project.name, version: browser.version(), capabilities, ...audit }, null, 2));
   expect(audit.errors).toEqual([]);
 });
+async function isFullscreen(page: Page) {
+  return page.evaluate(() => !!(document.fullscreenElement ??
+    (document as Document & { webkitFullscreenElement?: Element | null }).webkitFullscreenElement));
+}
 async function open(page: Page) {
   await page.goto('/');
   const video = page.locator('video');
@@ -176,10 +180,10 @@ for (const width of [1366, 1920]) {
       await page.bringToFront();
       await expect.poll(() => page.evaluate(() => document.hasFocus())).toBe(true);
       await page.getByRole('button', { name: 'Enter fullscreen', exact: true }).click();
-      await expect.poll(() => page.evaluate(() => !!document.fullscreenElement)).toBe(true);
+      await expect.poll(() => isFullscreen(page)).toBe(true);
       if (!index) await page.screenshot({ path: info.outputPath(`${info.project.name}-${width}-fullscreen.png`) });
       await page.getByRole('button', { name: 'Exit fullscreen', exact: true }).click();
-      await expect.poll(() => page.evaluate(() => !!document.fullscreenElement)).toBe(false);
+      await expect.poll(() => isFullscreen(page)).toBe(false);
       // Real end/replay, after the native seek has finished, rather than a short substitute film.
       await video.evaluate(v => { v.currentTime = v.duration - .15; });
       await expect.poll(() => video.evaluate(v => !v.seeking && v.readyState >= 2)).toBe(true);
@@ -220,7 +224,7 @@ test('desktop mouse idle, wheel scrolling and scoped keyboard navigation', async
   await page.keyboard.press('m');
   await page.keyboard.press('f');
   expect(await video.evaluate(v => v.muted)).toBe(false);
-  expect(await page.evaluate(() => !!document.fullscreenElement)).toBe(false);
+  expect(await isFullscreen(page)).toBe(false);
   expect(await video.evaluate(v => v.currentTime)).toBe(time);
   await skin.focus();
   await expect(skin).toBeFocused();
@@ -236,9 +240,9 @@ test('desktop mouse idle, wheel scrolling and scoped keyboard navigation', async
   await page.keyboard.press('ArrowLeft');
   await expect.poll(() => video.evaluate(v => v.currentTime)).toBeLessThan(1);
   await page.keyboard.press('f');
-  await expect.poll(() => page.evaluate(() => !!document.fullscreenElement)).toBe(true);
+  await expect.poll(() => isFullscreen(page)).toBe(true);
   await page.keyboard.press('f');
-  await expect.poll(() => page.evaluate(() => !!document.fullscreenElement)).toBe(false);
+  await expect.poll(() => isFullscreen(page)).toBe(false);
   await skin.focus();
   let escaped = false;
   for (let i = 0; i < 30; i++) {
