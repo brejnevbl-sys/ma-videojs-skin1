@@ -106,6 +106,9 @@ for (const size of sizes) {
 }
 for (const width of [1366, 1920]) {
   test(`desktop real films and mouse controls at ${width}`, async ({ page }, info) => {
+    // Two real films, multiple native fullscreen transitions, PNGs and Axe need an aggregate budget.
+    // Per-interaction expect timeouts remain unchanged at 5s.
+    test.setTimeout(60000);
     await page.setViewportSize({ width, height: width === 1366 ? 768 : 1080 });
     const video = await open(page);
     const node = await video.elementHandle();

@@ -41,7 +41,7 @@ jobs:
     # avoiding the unreliable Ubuntu apt mirrors and browser CDN installation step.
     container: mcr.microsoft.com/playwright:v1.65.0-noble
     outputs:
-      failure_detail: ${{ steps.summary.outputs.failure_detail }}
+      failure_detail: ${{ steps.summary.outputs.failure_detail || steps.focus-summary.outputs.failure_detail }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -62,6 +62,15 @@ jobs:
       - run: node scripts/ci-summary.mjs
         id: summary
         if: always()
+      - name: Repeat Firefox native fullscreen and focus
+        run: xvfb-run --auto-servernum --server-args="-screen 0 2560x1440x24" npx playwright test tests/desktop.spec.ts --project=firefox --headed --workers=1 --repeat-each=3 --grep="desktop real films and mouse controls at 1920" --output=test-results/firefox-focus --reporter=line,json
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_FILE: test-results/firefox-focus/results.json
+      - run: node scripts/ci-summary.mjs
+        id: focus-summary
+        if: always()
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_FILE: test-results/firefox-focus/results.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
