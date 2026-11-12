@@ -13,7 +13,7 @@
     "deploy:netlify": "npx --yes netlify-cli@27 deploy --build",
     "deploy:cloudflare": "npm run build && npx --yes wrangler@4 pages deploy dist --project-name ma",
     "test": "playwright test --project=chromium",
-    "test:desktop:engines": "playwright test --project=firefox --project=webkit",
+    "test:desktop:engines": "playwright test --project=firefox --project=webkit --workers=1",
     "postinstall": "patch-package --error-on-fail"
   },
   "dependencies": {
