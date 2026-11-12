@@ -118,6 +118,21 @@
     rotate: -24deg;
     pointer-events: none;
   }
+  /* Ma Pause: the ink appears when native Video.js play state is paused.
+     The button responds immediately; only non-interactive decoration animates. */
+  .video-controls-center-play[data-paused]::before { animation: ma-ink-breathe 220ms var(--ma-ease) both; }
+  .video-controls-center-play[data-paused]::after {
+    content: '';
+    position: absolute;
+    inset: -11px;
+    border: 2px solid transparent;
+    border-block-start-color: var(--media-accent);
+    border-inline-start-color: var(--media-accent);
+    border-radius: 50%;
+    rotate: -25deg;
+    pointer-events: none;
+    animation: ma-ink-breathe 220ms var(--ma-ease) both;
+  }
   .video-controls-center-play-icon { width: 28px; height: 28px; }
   .video-controls-center-seek { min-width: 44px; min-height: 44px; }
   .video-controls-center-seek-icon { width: 24px; height: 24px; }
@@ -219,7 +234,22 @@
     .media-dialog-popup { width: calc(100% - 24px); max-height: calc(100% - 24px); padding: 16px; gap: 12px; }
     .media-dialog-title { font-size: 30px; }
   }
-  @container media-root (width < 48rem) { .video-controls-center { display: none; } }
+  /* The central ring is hidden on small players; bring its ink gesture to the
+     always-available bottom Play button without altering its 44px hit target. */
+  @container media-root (width < 48rem) {
+    .video-controls-center { display: none; }
+    .video-controls-start > .media-play-button[data-paused]::after {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border: 1px solid var(--media-accent);
+      border-inline-end-color: transparent;
+      border-radius: 50%;
+      rotate: -25deg;
+      pointer-events: none;
+      animation: ma-ink-breathe 220ms var(--ma-ease) both;
+    }
+  }
   @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
     .video-controls-top, .video-controls-bottom { background: var(--media-background); }
     .media-menu-popup, .media-volume-popover-popup, .media-tooltip-popup { border-color: currentColor; }
@@ -238,6 +268,13 @@
     .media-buffering-indicator::after { border-color: CanvasText; border-block-start-color: Highlight; background: Canvas; }
     .media-menu-radio-item[aria-checked="true"] { outline: 1px solid Highlight; }
     .media-button:is(:focus-visible, [aria-expanded="true"]) { border-color: CanvasText; }
+    .video-controls-center-play[data-paused]::after,
+    .video-controls-start > .media-play-button[data-paused]::after { border-block-start-color: CanvasText; border-inline-start-color: CanvasText; }
   }
 }
 @keyframes ma-loading { to { rotate: 360deg; } }
+@keyframes ma-ink-breathe {
+  from { opacity: .12; scale: .90; }
+  to { opacity: .86; scale: 1; }
+}
+
