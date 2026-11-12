@@ -16,7 +16,8 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm run build
-      - run: npx playwright install --with-deps chromium
+      # Ubuntu package mirrors are not reliably reachable in CI; skip apt dependency download.
+      - run: npx playwright install chromium
       - run: npm test -- --reporter=line,json
         env:
           PLAYWRIGHT_JSON_OUTPUT_FILE: test-results/results.json
