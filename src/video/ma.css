@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap');
+
 /* MA's portable identity layer. Playback, geometry and semantics belong to Video.js. */
 .media-skin[data-theme="scaffold"][data-preset="video"] {
   --media-default-accent-color: #c06855;
@@ -10,6 +12,7 @@
   --media-button-highlight: #f2e8d217;
   --media-video-border-radius: var(--media-border-radius, 2px);
   --ma-serif: 'Yu Mincho', 'Hiragino Mincho ProN', 'Noto Serif CJK JP', Georgia, serif;
+  --ma-display: 'East Sea Dokdo', 'Yu Mincho', 'Hiragino Mincho ProN', Georgia, serif;
   --ma-sans: var(--media-font-family, ui-sans-serif, system-ui, sans-serif);
   --ma-surface: rgb(19 19 19 / 97%);
   --ma-border: #f2e8d24d;
@@ -37,10 +40,10 @@
     background: linear-gradient(#131313e6, #13131370 70%, #13131300);
   }
   .ma-player-brand { margin-inline-end: auto; display: flex; align-items: center; gap: 16px; flex-shrink: 0; pointer-events: none; }
-  .ma-player-wordmark { display: flex; align-items: center; gap: 12px; font: 26px/1 var(--ma-serif); letter-spacing: .1em; }
+  .ma-player-wordmark { display: flex; align-items: center; gap: 12px; font: 400 38px/1 var(--ma-display); letter-spacing: .015em; }
   .ma-player-wordmark span { font-size: 13px; color: var(--media-foreground); letter-spacing: 0; border-block-end: 1px solid var(--media-accent); padding-block-end: 3px; }
   .ma-player-tagline { border-inline-start: 1px solid var(--ma-border); padding-inline-start: 16px; font-size: 9px; letter-spacing: .2em; text-transform: uppercase; }
-  .media-title { background: transparent; padding: 0 12px; font: italic 15px var(--ma-serif); }
+  .media-title { background: transparent; padding: 0 12px; font: 400 23px/1.05 var(--ma-display); }
 
   .media-button {
     width: 44px;
@@ -184,7 +187,7 @@
   }
   .media-dialog-backdrop { background: #131313f5; }
   .media-dialog-popup { padding: 28px; gap: 18px; border: 1px solid var(--ma-border); border-block-start: 2px solid var(--media-accent); background: var(--media-popover); }
-  .media-dialog-title { font: 26px/1.2 var(--ma-serif); font-weight: 400; }
+  .media-dialog-title { font: 400 38px/1 var(--ma-display); }
   .media-dialog-description { font: 13px/1.7 var(--ma-sans); color: var(--media-foreground); }
   .media-dialog-close { width: auto; min-height: 44px; border-radius: 2px; padding-inline: 16px; font: 12px var(--ma-sans); }
   :focus-visible { outline: 2px solid var(--media-ring); outline-offset: 3px; }
@@ -208,9 +211,9 @@
     .video-controls-group, .video-controls-row { gap: 0; }
     .video-controls-start > .media-play-button { margin-inline-end: 0; }
     .media-time-group { font-size: 11px; gap: 3px; padding-inline: 5px; letter-spacing: 0; }
-    .ma-player-wordmark { font-size: 22px; gap: 8px; }
+    .ma-player-wordmark { font-size: 29px; gap: 8px; }
     .media-dialog-popup { width: calc(100% - 24px); max-height: calc(100% - 24px); padding: 16px; gap: 12px; }
-    .media-dialog-title { font-size: 22px; }
+    .media-dialog-title { font-size: 30px; }
   }
   @container media-root (width < 48rem) { .video-controls-center { display: none; } }
   @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
