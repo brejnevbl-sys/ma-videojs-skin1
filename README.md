@@ -18,13 +18,12 @@ npm run dev
 - `/workbench/` — official workbench (sizes, aspect ratios, languages and playback options).
 - `/preview.html#width=240&ratio=16:9` — isolated narrow player.
 
-The player uses a bundled CC0 flower video from MDN, including an audio track.
-No API keys, account, external media request or network service is needed for playback.
-See [media attribution](apps/preview/public/media/ATTRIBUTION.md).
-
-The current sample is unchanged. See [replacing the film](docs/MEDIA.md) for the
-shared video/poster/credits configuration. Code is licensed under [Apache 2.0](LICENSE);
-third-party and media notices are retained in [NOTICE](NOTICE).
+The landing page selects two Pexels stock films, with creator credits and keyboard switching.
+The four real media files are committed and verified locally: Rainy Day (60.143s) and
+Serene Japanese Temple in Autumn Forest (14.000s), each with a separate poster.
+Both films are silent (no audio streams). See [real-media QA](docs/PR7-REAL-MEDIA-QA.md).
+The unchanged MDN CC0 sample remains only in the technical preview/workbench.
+Code is licensed under [Apache 2.0](LICENSE); media rights are separate (see [NOTICE](NOTICE)).
 
 ## Validate
 
@@ -40,6 +39,14 @@ On Linux with a preinstalled Chromium, use
 `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm test`.
 On a fresh Linux runner, `npx playwright install --with-deps chromium` installs browser prerequisites.
 There is no configured lint script.
+
+Desktop/browser QA for Issue #9: [results, screenshots and boundaries](docs/DESKTOP-QA.md).
+`npm run test:desktop:engines` runs the unmocked desktop suite in Firefox/WebKit.
+A separate CI job tests PR #7’s Vercel Preview after verifying its build SHA; reports are retained as artifacts.
+Preview access is an explicit CI gate. Initial runs detected Vercel Authentication; the latest vercel-preview job records the current access result.
+
+`npm ci` applies a version-specific Video.js 10.3.0 hover fix using patch-package.
+Keep postinstall enabled; see [patch rationale and regression](patches/README.md).
 
 The browser suite covers real playback and replay, pause, timeline pointer/keyboard seeking,
 time display, mute/volume, fullscreen, settings/rate selection, Escape and focus return,
@@ -91,3 +98,5 @@ See [Milestone 3 report](docs/MILESTONE-3.md) for routing and mobile menu QA.
 The owner has confirmed the Milestone 1 Vercel demo. This branch contains Milestone 3
 for review; it has not been deployed or merged, and no contest submission or Mux bonus is claimed. The generated hosting configuration is retained for a
 later deployment; publishing the workbench requires a separate explicit request.
+
+See [Pexels implementation status and test boundaries](docs/PEXELS-IMPLEMENTATION.md).

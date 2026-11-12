@@ -8,9 +8,17 @@ Licensed under Apache License 2.0.
 Upstream notice: docs/VIDEOJS-LICENSE.txt
 Source: https://github.com/videojs/video.js
 Video.js is a registered trademark of Brightcove Inc.; no endorsement is implied.
+Local Video.js 10.3.0 modifications to the hover guard, controls reset and viewport
+bounds, plus the WebKit anchor positioning fallback in @videojs/utils, are recorded
+in patches/ and documented in patches/README.md.
 
 Third-party packages and installed agent skills retain their own license notices.
 The bundled MDN flower video and derived poster are CC0, separately from the
 project's source license. See apps/preview/public/media/ATTRIBUTION.md.
 A future author's film must carry its own explicit attribution/licensing terms;
 Apache 2.0 on the project source does not automatically license that media.
+
+The landing page selects third-party Pexels films by Roberto Lee Cortes and
+Hideyoshi isai. They are stock footage, not MA cinematography. The four owner-supplied files are committed and locally verified; see docs/PEXELS.md and the separate attribution
+record at apps/preview/public/media/pexels/ATTRIBUTION.md. Pexels License terms
+must be reviewed at download time; Apache 2.0 does not license these films.

@@ -2,11 +2,16 @@ name: Validate MA
 on:
   push:
   pull_request:
+concurrency:
+  group: ma-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
   validate:
     runs-on: ubuntu-latest
+    outputs:
+      failure_detail: ${{ steps.summary.outputs.failure_detail }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -16,14 +21,115 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm run build
-      - run: npx playwright install --with-deps chromium
+      # Ubuntu package mirrors are not reliably reachable in CI; skip apt dependency download.
+      - run: npx playwright install chromium
       - run: npm test -- --reporter=line,json
         env:
           PLAYWRIGHT_JSON_OUTPUT_FILE: test-results/results.json
       - run: node scripts/ci-summary.mjs
+        id: summary
         if: always()
       - uses: actions/upload-artifact@v4
-        if: failure()
+        if: always()
         with:
           name: browser-results
           path: test-results/
+
+  desktop-engines:
+    runs-on: ubuntu-latest
+    # Keep this image in sync with package-lock's Playwright version. It includes browser libraries/codecs,
+    # avoiding the unreliable Ubuntu apt mirrors and browser CDN installation step.
+    container: mcr.microsoft.com/playwright:v1.65.0-noble
+    outputs:
+      failure_detail: ${{ steps.summary.outputs.failure_detail || steps.focus-summary.outputs.failure_detail }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+      # Actions mounts this existing directory with a different owner; Firefox requires it to match its UID.
+      - name: Fix container home ownership
+        run: chown "$(id -u):$(id -g)" "$HOME"
+      # Native focus/fullscreen needs a foreground window; headless Firefox can lose widget focus after exit.
+      # The official image includes Xvfb. Assertions remain identical to the headless suite.
+      - run: xvfb-run --auto-servernum --server-args="-screen 0 2560x1440x24" npm run test:desktop:engines -- --headed --reporter=line,json
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_FILE: test-results/results.json
+      - run: node scripts/ci-summary.mjs
+        id: summary
+        if: always()
+      - name: Repeat Firefox native fullscreen and focus
+        run: xvfb-run --auto-servernum --server-args="-screen 0 2560x1440x24" npx playwright test tests/desktop.spec.ts --project=firefox --headed --workers=1 --repeat-each=3 --grep="desktop real films and mouse controls at 1920" --output=test-results/firefox-focus --reporter=line,json
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_FILE: test-results/firefox-focus/results.json
+      - run: node scripts/ci-summary.mjs
+        id: focus-summary
+        if: always()
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_FILE: test-results/firefox-focus/results.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: desktop-engine-results
+          path: test-results/
+
+  vercel-preview:
+    needs: validate
+    # This URL belongs to PR #7's branch; it must not gate unrelated branches/main against the wrong deployment.
+    if: ${{ github.head_ref == 'feat/ma-pexels-films' || github.ref_name == 'feat/ma-pexels-films' }}
+    runs-on: ubuntu-latest
+    outputs:
+      failure_detail: ${{ steps.summary.outputs.failure_detail || steps.preview.outputs.failure_detail }}
+    env:
+      MA_PREVIEW_URL: https://ma-videojs-skin1-git-feat-ma-pexels-films-brejnevbl-sys.vercel.app/
+      MA_EXPECTED_REVISION: ${{ github.event.pull_request.head.sha || github.sha }}
+      PLAYWRIGHT_JSON_OUTPUT_FILE: test-results/vercel/results.json
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install chromium
+      - name: Test current Vercel Preview with real media
+        id: preview
+        run: |
+          node scripts/wait-for-preview.mjs
+          npx playwright test tests/desktop.spec.ts --project=chromium --output=test-results/vercel --reporter=line,json
+      - run: node scripts/ci-summary.mjs
+        id: summary
+        if: always()
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vercel-preview-results
+          path: test-results/vercel/
+
+  browser-diagnostics:
+    needs: validate
+    if: ${{ failure() && needs.validate.outputs.failure_detail != '' }}
+    name: "${{ needs.validate.outputs.failure_detail }}"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Full failure details are retained in the browser-results artifact and validate summary."
+
+  engine-diagnostics:
+    needs: desktop-engines
+    if: ${{ failure() && needs.desktop-engines.outputs.failure_detail != '' }}
+    name: "${{ needs.desktop-engines.outputs.failure_detail }}"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Full engine failure details are retained in the desktop-engine-results artifact."
+
+  preview-diagnostics:
+    needs: vercel-preview
+    if: ${{ failure() && needs.vercel-preview.outputs.failure_detail != '' }}
+    name: "${{ needs.vercel-preview.outputs.failure_detail }}"
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Preview deployment access and test evidence is retained in vercel-preview-results."

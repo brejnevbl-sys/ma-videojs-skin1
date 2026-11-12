@@ -25,4 +25,4 @@ It loads from the Google Fonts stylesheet in `src/video/ma.css` (`font-display: 
 - Test with PR #7 film selector after integration, as that branch adds additional typography-bearing elements.
 - Recheck the effective third-party font license if replacing East Sea Dokdo with any exact reference font. Do not commit unlicensed font files.
 
-This is a separate visual-only PR so the Pexels integration PR #7 can be completed safely.
+PR #7 (Pexels films, mobile/desktop/real-media QA) has merged. This feature is reconciled against that version of `main`; final pre-merge checks must cover both real films and multiple viewport sizes.

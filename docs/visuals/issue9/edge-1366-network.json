@@ -1,0 +1,81 @@
+{
+  "engine": "chromium",
+  "version": "155.0.4283.62",
+  "capabilities": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36 Edg/155.0.0.0",
+    "scope": true,
+    "has": true,
+    "mask": true,
+    "clip": true,
+    "containerQueries": true,
+    "fullscreen": true,
+    "h264": "probably"
+  },
+  "errors": [],
+  "network": [
+    {
+      "path": "/media/pexels/rainy-day.jpg",
+      "method": "HEAD",
+      "status": 200,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "/media/pexels/autumn-temple.mp4",
+      "method": "HEAD",
+      "status": 200,
+      "type": "video/mp4"
+    },
+    {
+      "path": "/media/pexels/autumn-temple.jpg",
+      "method": "HEAD",
+      "status": 200,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "/media/pexels/rainy-day.mp4",
+      "method": "HEAD",
+      "status": 200,
+      "type": "video/mp4"
+    },
+    {
+      "path": "/media/pexels/rainy-day.jpg",
+      "method": "GET",
+      "status": 200,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "/media/pexels/rainy-day.mp4",
+      "method": "GET",
+      "status": 206,
+      "type": "video/mp4",
+      "range": "bytes 0-1242014/1242015"
+    },
+    {
+      "path": "/media/pexels/rainy-day.mp4",
+      "method": "GET",
+      "status": 206,
+      "type": "video/mp4",
+      "range": "bytes 327680-1242014/1242015"
+    },
+    {
+      "path": "/media/pexels/autumn-temple.jpg",
+      "method": "GET",
+      "status": 200,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "/media/pexels/autumn-temple.mp4",
+      "method": "GET",
+      "status": 206,
+      "type": "video/mp4",
+      "range": "bytes 0-1108776/1108777"
+    },
+    {
+      "path": "/media/pexels/autumn-temple.mp4",
+      "method": "GET",
+      "status": 206,
+      "type": "video/mp4",
+      "range": "bytes 851968-1108776/1108777"
+    }
+  ]
+}
